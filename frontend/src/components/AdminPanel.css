@@ -1,0 +1,96 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5; /* Arka plan rengi */
+}
+
+.admin-panel {
+    display: flex;
+    height: 100vh; /* Yüksekliği tam ekran yap */
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #4a4a4a; /* Koyu gri arka plan */
+    color: white; /* Yazı rengi */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h2 {
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style: none; /* Noktaları kaldır */
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 10px 0;
+}
+
+.sidebar ul li a {
+    color: white; /* Yazı rengi */
+    text-decoration: none; /* Altı çizgi yok */
+    transition: color 0.3s; /* Renk geçişi */
+}
+
+.sidebar ul li a:hover {
+    color: #ffa500; /* Hover rengi */
+}
+
+.main-content {
+    flex: 1; /* Genişliği doldur */
+    padding: 20px;
+    background-color: #ffffff; /* Beyaz arka plan */
+    overflow-y: auto; /* Taşma durumunda kaydırma */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+    border-radius: 8px; /* Kenarları yuvarlat */
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #333; /* Başlık rengi */
+}
+
+.table {
+    width: 100%; /* Tablo genişliği */
+    border-collapse: collapse; /* Kenarların birleşmesini sağlar */
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    border: 1px solid #ccc; /* Kenar rengi */
+    padding: 10px; /* İçerik için dolgu */
+    text-align: left; /* Soldan hizalama */
+}
+
+.table th {
+    background-color: #4a4a4a; /* Koyu gri başlık arka plan rengi */
+    color: white; /* Başlık yazı rengi */
+}
+
+.table tr:hover {
+    background-color: #f1f1f1; /* Satır üzerine gelince arka plan rengi */
+}
+
+.button {
+    padding: 10px 15px;
+    background-color: #5cb85c; /* Yeşil buton rengi */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer; /* Fare ile gösterim değişir */
+    transition: background-color 0.3s; /* Arka plan rengi geçişi */
+}
+
+.button:hover {
+    background-color: #4cae4c; /* Hover rengi */
+}

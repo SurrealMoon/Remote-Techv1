@@ -1,0 +1,101 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw; /* Tüm genişliği kullan */
+  height: 100vh; /* Tüm yüksekliği kullan */
+}
+
+.login-container {
+  display: flex;
+  width: 95%; /* Konteyneri daha geniş yap */
+  max-width: 2000px; /* Max genişlik ayarı */
+  height: 70%; /* Yüksekliği de genişlet */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Derin gölge efekti */
+  background-color: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.login-left {
+  flex: 1.5; /* Sol tarafa daha fazla alan ver */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+  background-color: #e8e8e8;
+}
+
+h2 {
+  font-size: 26px; /* Başlık boyutunu artırdık */
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #333; /* Daha koyu renk */
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #333; /* Daha koyu renk */
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px; /* Girdi metni boyutunu artırdık */
+}
+
+.login-button {
+  padding: 0.75rem;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease; /* Geçiş efekti ekledik */
+}
+
+.login-button:hover {
+  background-color: #555; /* Butonun hover rengi */
+}
+
+.login-right {
+  flex: 1.5; /* Sağ tarafa da aynı miktarda alan ver */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
+
+.login-right img {
+  max-width: 85%; /* Resmin boyutunu artırdık */
+  height: auto;
+  object-fit: cover;
+}

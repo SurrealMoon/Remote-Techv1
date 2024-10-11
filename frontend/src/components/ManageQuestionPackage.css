@@ -1,0 +1,108 @@
+.manage-question-package {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333; /* Koyu gri yazı */
+    background-color: #F7F7F7; /* Hafif gri arka plan */
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    font-size: 24px;
+    color: #333; /* Koyu gri başlık */
+  }
+  
+  .add-package-button {
+    background-color: #E0E0E0; /* Hafif gri */
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-package-button:hover {
+    background-color: #CFCFCF; /* Daha koyu gri */
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #FFFFFF; /* Beyaz arka plan */
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Hafif gölge */
+  }
+  
+  th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #E0E0E0; /* İnce gri çizgiler */
+  }
+  
+  th {
+    background-color: #F5F5F5; /* Hafif gri */
+    color: #333; /* Koyu gri */
+  }
+  
+  tr:nth-child(even) {
+    background-color: #F9F9F9; /* Satırlar arasında hafif gri */
+  }
+  
+  .edit-button, .delete-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .edit-button {
+    color: #007BFF; /* Daha yumuşak mavi */
+  }
+  
+  .delete-button {
+    color: #DC3545; /* Klasik kırmızı */
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4); /* Daha yumuşak bir arkaplan */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+  }
+  
+  button[type="submit"], button[type="button"] {
+    background-color: #007BFF; /* Daha yumuşak bir mavi */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button[type="button"] {
+    background-color: #6C757D; /* Klasik gri */
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #0056b3; /* Biraz daha koyu mavi */
+  }
+  
