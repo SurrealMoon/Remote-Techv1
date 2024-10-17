@@ -5,41 +5,46 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5; /* Arka plan rengi */
+    font-family: 'Arial', sans-serif;
+    background-color: #eef2f5; /* Genel arka plan rengi */
 }
 
 .admin-panel {
     display: flex;
-    height: 100vh; /* Yüksekliği tam ekran yap */
+    width: 100vw; /* Tüm genişliği kullan */
+    height: 100vh; /* Tüm yüksekliği kullan */
 }
 
 .sidebar {
-    width: 250px;
-    background-color: #4a4a4a; /* Koyu gri arka plan */
-    color: white; /* Yazı rengi */
+    width: 250px; /* Genişliği artırdık */
+    background-color: #292b2c; /* Koyu gri arka plan */
+    color: #ffffff; /* Yazı rengi */
     padding: 20px;
     display: flex;
     flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Sol kenar gölgesi */
+    overflow-y: auto; /* Yan menü taşarsa kaydırma özelliği */
 }
 
 .sidebar h2 {
     margin-bottom: 20px;
+    font-size: 1.6rem; /* Başlık boyutu */
 }
 
 .sidebar ul {
     list-style: none; /* Noktaları kaldır */
-    padding: 0;
+    padding: 0; /* İçerik alanını sıfırla */
 }
 
 .sidebar ul li {
-    margin: 10px 0;
+    margin: 15px 0; /* Alt ve üst boşluk */
 }
 
 .sidebar ul li a {
-    color: white; /* Yazı rengi */
+    color: #d3d3d3; /* Açık gri yazı rengi */
     text-decoration: none; /* Altı çizgi yok */
     transition: color 0.3s; /* Renk geçişi */
+    font-size: 1.1rem; /* Bağlantı boyutu */
 }
 
 .sidebar ul li a:hover {
@@ -48,33 +53,41 @@ body {
 
 .main-content {
     flex: 1; /* Genişliği doldur */
-    padding: 20px;
-    background-color: #ffffff; /* Beyaz arka plan */
+    padding: 30px; /* İçerik boşluklarını artırdık */
+    background-color: #494949; /* Beyaz arka plan */
     overflow-y: auto; /* Taşma durumunda kaydırma */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Hafif gölge */
-    border-radius: 8px; /* Kenarları yuvarlat */
+    border-left: 1px solid #ccc; /* Sol kenar çizgisi */
+    display: flex; /* Flex kullanarak içeriği ortala */
+    flex-direction: column; /* Dikey yönlendirme */
+    align-items: center; /* Yatayda ortalama */
+    justify-content: flex-start; /* Üstten başlayarak yerleştirme */
+    
 }
 
 h1 {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     color: #333; /* Başlık rengi */
+    font-size: 2rem; /* Başlık boyutu artırıldı */
+    text-align: center; /* Ortada hizalama */
 }
 
 .table {
-    width: 100%; /* Tablo genişliği */
+    width: 90%; /* Tablo genişliği artırıldı */
     border-collapse: collapse; /* Kenarların birleşmesini sağlar */
-    margin-top: 20px;
+    margin-top: 30px; /* Üst boşluk artırıldı */
+    border: 1px solid #ddd; /* Tüm tablo kenarı */
 }
 
 .table th, .table td {
-    border: 1px solid #ccc; /* Kenar rengi */
-    padding: 10px; /* İçerik için dolgu */
+    border: 1px solid #ddd; /* Açık kenar rengi */
+    padding: 15px; /* İçerik için dolgu artırıldı */
     text-align: left; /* Soldan hizalama */
+    font-size: 1.1rem; /* Hücre yazı boyutu */
 }
 
 .table th {
-    background-color: #4a4a4a; /* Koyu gri başlık arka plan rengi */
-    color: white; /* Başlık yazı rengi */
+    background-color: #f8f9fa; /* Başlık arka plan rengi */
+    font-weight: bold; /* Kalın başlık */
 }
 
 .table tr:hover {
@@ -82,15 +95,16 @@ h1 {
 }
 
 .button {
-    padding: 10px 15px;
-    background-color: #5cb85c; /* Yeşil buton rengi */
+    padding: 12px 20px; /* Buton büyüklüğü */
+    background-color: #007bff; /* Mavi buton rengi */
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer; /* Fare ile gösterim değişir */
     transition: background-color 0.3s; /* Arka plan rengi geçişi */
+    margin-top: 20px; /* Üst boşluk */
 }
 
 .button:hover {
-    background-color: #4cae4c; /* Hover rengi */
+    background-color: #0056b3; /* Hover rengi */
 }

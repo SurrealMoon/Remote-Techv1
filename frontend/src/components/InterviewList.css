@@ -1,0 +1,54 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #eef2f5; /* Genel arka plan rengi */
+}
+
+.table {
+    width: 90%; /* Tablo genişliği */
+    border-collapse: collapse; /* Kenarların birleşmesini sağlar */
+    margin-top: 20px;
+    border: 1px solid #ddd; /* Tüm tablo kenarı */
+    background-color: #ffffff; /* Tablo arka plan rengi beyaz */
+}
+
+.table th, .table td {
+    border: 1px solid #ddd; /* Açık kenar rengi */
+    padding: 12px; /* İçerik için dolgu */
+    text-align: left; /* Soldan hizalama */
+    color: #333; /* Koyu yazı rengi */
+}
+
+.table th {
+    background-color: #f8f9fa; /* Başlık arka plan rengi */
+    font-weight: bold; /* Kalın başlık */
+}
+
+.table tr:hover {
+    background-color: #f1f1f1; /* Satır üzerine gelince arka plan rengi */
+}
+
+input, select, textarea {
+    background-color: #f0f0f0; /* Seçim alanları için arka plan rengi */
+    color: #333; /* Yazı rengi */
+    border: 1px solid #ccc; /* Kenar rengi */
+    padding: 10px; /* İçerik için dolgu */
+    border-radius: 4px; /* Kenar yuvarlama */
+    width: 100%; /* Genişlik */
+    margin-top: 5px; /* Üst boşluk */
+}
+
+.button {
+    padding: 10px 15px;
+    background-color: #007bff; /* Mavi buton rengi */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer; /* Fare ile gösterim değişir */
+    transition: background-color 0.3s; /* Arka plan rengi geçişi */
+    margin-top: 20px; /* Üst boşluk */
+}
+
+.button:hover {
+    background-color: #0056b3; /* Hover rengi */
+}
+0
