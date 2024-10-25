@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import CreateInterviewModal from './CreateInterviewModal';
+import { useNavigate } from 'react-router-dom';
 import './InterviewList.css';
 
-const InterviewList = ({ onAddInterview }) => {
+const InterviewList = () => {
     const [interviews, setInterviews] = useState([]);
     const [editInterview, setEditInterview] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const storedInterviews = JSON.parse(localStorage.getItem('interviews')) || [];
         setInterviews(storedInterviews);
-        console.log('Loaded interviews from localStorage:', storedInterviews);
     }, []);
 
     const handleDelete = (id) => {
@@ -36,47 +37,64 @@ const InterviewList = ({ onAddInterview }) => {
 
     const handleAddInterview = (newInterview) => {
         const updatedInterviews = [...interviews, newInterview];
+        console.log('Adding new interview:', newInterview);
         setInterviews(updatedInterviews);
         localStorage.setItem('interviews', JSON.stringify(updatedInterviews));
-        console.log('New interview added:', newInterview);
         setIsModalOpen(false);
+    };
+
+    const handleSeeVideos = (interviewId) => {
+        console.log('Navigating to videos for interview:', interviewId);
+        if (!interviewId) {
+            console.error('No interview ID provided');
+            return;
+        }
+        localStorage.setItem('selectedInterviewId', interviewId);
+        navigate(`/videos/${interviewId}`);
+    };
+    
+
+    const handleCopyLink = (interviewId) => {
+        const link = `${window.location.origin}/video-recording/${interviewId}`;
+        navigator.clipboard.writeText(link)
+            .then(() => {
+                alert('Link kopyalandı: ' + link);
+            })
+            .catch(err => {
+                console.error('Link kopyalanamadı: ', err);
+            });
     };
 
     return (
         <div className="interview-list-container">
-            <h2>Interview List</h2>
-            <button onClick={() => setIsModalOpen(true)}>Add Interview</button>
+            <div className="interview-list-header">
+                <h2>Interview List</h2>
+                <button className="create-interview-btn" onClick={() => setIsModalOpen(true)}>+ Create Interview</button>
+            </div>
             {interviews.length > 0 ? (
-                interviews.map((interview, index) => (
-                    <div key={index} className="interview-card">
+                interviews.map((interview) => (
+                    <div key={interview.id} className="interview-card">
                         <h3>{interview.title}</h3>
                         <p>Date: {interview.date}</p>
-                        <button className="see-videos-btn" onClick={() => console.log(`Viewing videos for interview ID: ${interview.id}`)}>See Videos</button>
+                        <button className="see-videos-btn" onClick={() => handleSeeVideos(interview.id)}>See Videos</button>
                         <button className="edit-btn" onClick={() => handleEdit(interview)}>Edit</button>
                         <button className="delete-btn" onClick={() => handleDelete(interview.id)}>Delete</button>
+                        <button className="copy-link-btn" onClick={() => handleCopyLink(interview.id)}>Copy Link</button>
                     </div>
                 ))
             ) : (
                 <p className="no-interviews">No interviews available</p>
             )}
 
-            {/* Düzenleme modalı */}
-            {editInterview && isModalOpen && (
+            {/* Edit Modal */}
+            {isModalOpen && (
                 <CreateInterviewModal
-                    onAddInterview={handleSaveEdit}
+                    onAddInterview={editInterview ? handleSaveEdit : handleAddInterview}
                     onClose={() => {
                         setEditInterview(null);
                         setIsModalOpen(false);
                     }}
                     initialData={editInterview}
-                />
-            )}
-
-            {/* Yeni interview ekleme modalı */}
-            {isModalOpen && !editInterview && (
-                <CreateInterviewModal
-                    onAddInterview={handleAddInterview}
-                    onClose={() => setIsModalOpen(false)}
                 />
             )}
         </div>

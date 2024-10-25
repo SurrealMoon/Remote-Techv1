@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminPanel.css';
 import ManageQuestionPackage from './ManageQuestionPackage';
@@ -11,13 +11,21 @@ const AdminPanel = () => {
     const [interviews, setInterviews] = useState([]); // Interview listesi için state
     const navigate = useNavigate();
 
+    useEffect(() => {
+        // localStorage'dan mevcut mülakatları yükleme
+        const storedInterviews = JSON.parse(localStorage.getItem('interviews')) || [];
+        setInterviews(storedInterviews);
+    }, []);
+
     const handleLogout = () => {
         localStorage.removeItem('user');
         navigate('/'); // Giriş sayfasına yönlendirme
     };
 
     const addInterview = (newInterview) => {
-        setInterviews([...interviews, newInterview]); // Yeni interview'ü listeye ekle
+        const updatedInterviews = [...interviews, newInterview];
+        setInterviews(updatedInterviews); // Yeni interview'ü listeye ekle
+        localStorage.setItem('interviews', JSON.stringify(updatedInterviews)); // localStorage'a kaydet
         setShowModal(false); // Modalı kapat
     };
 

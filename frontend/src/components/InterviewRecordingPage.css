@@ -1,0 +1,89 @@
+/* InterviewRecordingPage.css */
+.interview-recording-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f4f4f9;
+  font-family: 'Arial', sans-serif;
+  padding: 20px;
+}
+
+.interview-recording-page h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.interview-recording-page p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.interview-recording-page .timer {
+  font-size: 1.5rem;
+  color: #ff4b5c;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.interview-recording-page video {
+  width: 80%;
+  max-width: 700px;
+  margin-bottom: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.interview-recording-page .button-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.interview-recording-page button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.interview-recording-page button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.interview-recording-page button:hover:not(:disabled) {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.interview-recording-page button:active {
+  transform: scale(0.98);
+}
+
+.interview-recording-page button.stop-btn {
+  background-color: #dc3545;
+}
+
+.interview-recording-page button.stop-btn:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.interview-recording-page button.stop-btn:disabled {
+  background-color: #f5c6cb;
+}
+
+.interview-recording-page .footer-text {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #999;
+}

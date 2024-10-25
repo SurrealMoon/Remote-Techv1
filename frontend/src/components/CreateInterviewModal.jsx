@@ -33,7 +33,7 @@ const CreateInterviewModal = ({ onAddInterview, onClose, initialData }) => {
         }
 
         const newInterview = {
-            id: initialData ? initialData.id : Date.now(),
+            id: initialData ? initialData.id : Date.now(), // ID oluşturuluyor
             title,
             selectedPackage,
             date,
@@ -41,7 +41,13 @@ const CreateInterviewModal = ({ onAddInterview, onClose, initialData }) => {
             showAtOnce,
             customQuestions
         };
-        onAddInterview(newInterview);
+
+        // Yeni mülakatı localStorage'a ekleme
+        const interviews = JSON.parse(localStorage.getItem('interviews')) || [];
+        interviews.push(newInterview);
+        localStorage.setItem('interviews', JSON.stringify(interviews));
+
+        onAddInterview(newInterview); // Yeni mülakatı ekle
         onClose();
     };
 

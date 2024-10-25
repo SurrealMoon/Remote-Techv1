@@ -1,0 +1,17 @@
+/* src/components/VideoList.css */
+.video-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.video-item {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.no-videos {
+    color: #888;
+    text-align: center;
+}
