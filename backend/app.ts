@@ -1,10 +1,31 @@
-import express from 'express';
 import dotenv from 'dotenv';
-import connectDB from './config/db';
-dotenv.config();
+dotenv.config(); 
+import express from 'express';
+import { connectDB } from './config/db';
+import cors from 'cors';
+import questionPackageRoutes from './src/routes/questionPackageRoutes';
+import adminLoginRoutes from './src/routes/adminLoginRoutes';
+import createMasterAdmin from './src/services/adminService';
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-connectDB();
+// CORS'u global olarak tüm isteklere uygulayın ve API route'larından önce tanımlayın
+app.use(cors({
+    origin: 'http://localhost:5173', // Frontend'in çalıştığı portu belirtiyoruz
+    credentials: true, // Eğer frontend'de withCredentials kullanıyorsanız
+}));
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.use(express.json());
+
+// Uygulama başlatıldığında veritabanına bağlan ve master admin'i oluştur
+(async () => {
+    await connectDB();
+    await createMasterAdmin();  // Master admin oluşturma fonksiyonunu bağlantı sonrasında çağır
+})();
+
+// API route'larını cors'tan sonra kullanın
+app.use('/api', questionPackageRoutes);
+app.use('/api', adminLoginRoutes);
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

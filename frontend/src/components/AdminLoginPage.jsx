@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useAuthStore from '../stores/authStore'; // authStore dosyasını içe aktarın
 import './AdminLoginPage.css';
 import loginIllustration from '../assets/login-illustration.png';
 
 const AdminLoginPage = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState(''); // Email yerine username kullanıyoruz
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login); // Store'dan login işlevini alın
+  const error = useAuthStore((state) => state.error); // Store'dan error durumunu alın
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Email:", email);
+    console.log("Username:", username);
     console.log("Password:", password);
 
-    // Giriş işlemi başarılı olduğunda admin paneline yönlendir
-    // Burada gerçek bir kimlik doğrulama yapılmadığı için doğrudan yönlendiriyoruz
-    navigate('/admin-panel');
+
+    // Store'daki login işlevini çağır
+    const isLoggedIn = await login(username, password);
+
+    if (isLoggedIn) {
+      navigate('/admin-panel'); // Başarılı girişte yönlendirme
+    }
   };
 
   return (
@@ -25,12 +32,12 @@ const AdminLoginPage = () => {
           <h2>Admin Log in Page</h2>
           <form onSubmit={handleLogin} className="login-form">
             <div className="input-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="username">Kullanıcı Adı</label>
               <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
@@ -46,6 +53,7 @@ const AdminLoginPage = () => {
             </div>
             <button type="submit" className="login-button">Log in</button>
           </form>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
         <div className="login-right">
           <img src={loginIllustration} alt="Login Illustration" />
