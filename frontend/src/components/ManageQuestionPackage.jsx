@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
+import useQuestionPackageStore from '../stores/useQuestionPackageStore'; // Zustand store'u içe aktarın
 import "./ManageQuestionPackage.css";
 import ManageQuestions from './ManageQuestions'; // Soruları yönetecek bileşeni dahil ediyoruz
 
 const ManageQuestionPackage = () => {
-  const [questionPackages, setQuestionPackages] = useState(() => {
-    const savedPackages = localStorage.getItem("questionPackages");
-    return savedPackages ? JSON.parse(savedPackages) : [];
-  });
-
+  const {
+    packages: questionPackages,
+    fetchPackages,
+    addPackage,
+    updatePackage,
+    removePackage,
+    error
+  } = useQuestionPackageStore();
+  
   const [modalOpen, setModalOpen] = useState(false);
   const [currentPackage, setCurrentPackage] = useState(null);
   const [selectedPackage, setSelectedPackage] = useState(null); // Seçilen soru paketi
+
+  useEffect(() => {
+    fetchPackages(); // Component yüklendiğinde paketleri getir
+  }, [fetchPackages]);
 
   const handleAddPackage = () => {
     setCurrentPackage({ id: null, name: "", count: 0, questions: [] });
@@ -25,40 +34,30 @@ const ManageQuestionPackage = () => {
   const handleDeletePackage = (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this package?");
     if (confirmDelete) {
-      const updatedPackages = questionPackages.filter((pkg) => pkg.id !== id);
-      setQuestionPackages(updatedPackages);
-      localStorage.setItem("questionPackages", JSON.stringify(updatedPackages));
+      removePackage(id); // Zustand store'daki silme işlevini çağır
     }
   };
 
   const handleSave = (name, count) => {
     if (currentPackage && currentPackage.id !== null) {
-      const updatedPackages = questionPackages.map(pkg =>
-        pkg.id === currentPackage.id ? { ...pkg, name, count } : pkg
-      );
-      setQuestionPackages(updatedPackages);
-      localStorage.setItem("questionPackages", JSON.stringify(updatedPackages));
+        // Güncelleme işlemi
+        updatePackage(currentPackage.id, { packageName: name, questionCount: count }); // `name` yerine `packageName` olarak değiştirildi
     } else {
-      const newId = questionPackages.length ? Math.max(...questionPackages.map(pkg => pkg.id)) + 1 : 1;
-      const newPackage = { id: newId, name, count, questions: [] };
-      const updatedPackages = [...questionPackages, newPackage];
-      setQuestionPackages(updatedPackages);
-      localStorage.setItem("questionPackages", JSON.stringify(updatedPackages));
+        // Yeni paket ekleme işlemi
+        addPackage({ packageName: name, questionCount: count, questions: [] }); // `name` yerine `packageName`
     }
     setModalOpen(false);
     setCurrentPackage(null);
-  };
+};
 
   const handleManageQuestions = (pkg) => {
-    setSelectedPackage(pkg); // Seçilen soru paketi
+    setSelectedPackage(pkg); // `pkg` nesnesinin tamamını seçilen paket olarak atıyoruz
   };
+  
 
   const handleUpdateQuestions = (questions) => {
-    const updatedPackages = questionPackages.map(pkg =>
-      pkg.id === selectedPackage.id ? { ...pkg, questions, count: questions.length } : pkg
-    );
-    setQuestionPackages(updatedPackages);
-    localStorage.setItem("questionPackages", JSON.stringify(updatedPackages));
+    const updatedPackage = { ...selectedPackage, questions, count: questions.length };
+    updatePackage(selectedPackage.id, updatedPackage); // Soruları güncelle
     setSelectedPackage(null); // Soru düzenleme işlemi bittikten sonra paketi temizliyoruz
   };
 
@@ -83,14 +82,14 @@ const ManageQuestionPackage = () => {
           </tr>
         </thead>
         <tbody>
-          {questionPackages.map((pkg) => (
-            <tr key={pkg.id}>
-              <td>{pkg.id}</td>
-              <td>{pkg.name}</td>
-              <td>{pkg.count}</td>
+          {questionPackages.map((pkg, index) => (
+            <tr key={pkg._id}>
+              <td>{index + 1}</td>
+              <td>{pkg.packageName}</td>
+              <td>{pkg.questionCount}</td>
               <td>
                 <button className="edit-button" onClick={() => handleEditPackage(pkg)}>✏️</button>
-                <button className="delete-button" onClick={() => handleDeletePackage(pkg.id)}>🗑️</button>
+                <button className="delete-button" onClick={() => handleDeletePackage(pkg._id)}>🗑️</button>
                 <button className="manage-questions-button" onClick={() => handleManageQuestions(pkg)}>Manage Questions</button>
               </td>
             </tr>
@@ -107,23 +106,26 @@ const ManageQuestionPackage = () => {
       )}
 
       {selectedPackage && (
-        <ManageQuestions
-          packageId={selectedPackage.id}
-          questions={selectedPackage.questions || []}
-          onUpdateQuestions={handleUpdateQuestions}
-        />
-      )}
+    <ManageQuestions
+        packageId={selectedPackage._id}
+        packageName={selectedPackage.packageName} // `packageName` olarak geçildi
+        questions={selectedPackage.questions || []}
+        onUpdateQuestions={handleUpdateQuestions}
+    />
+)}
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 };
 
 const PackageModal = ({ package: currentPackage, onSave, onClose }) => {
   const [name, setName] = useState(currentPackage?.name || "");
-  const [count, setCount] = useState(currentPackage?.count || 0);
+  const [count, setCount] = useState(currentPackage?.questions.length || 0); // Başlangıç olarak questions.length kullanılıyor
 
   useEffect(() => {
     setName(currentPackage?.name || "");
-    setCount(currentPackage?.count || 0);
+    setCount(currentPackage?.questions.length || 0); // Güncel veri geldiğinde count'u güncelle
   }, [currentPackage]);
 
   const handleSubmit = (e) => {
@@ -141,7 +143,7 @@ const PackageModal = ({ package: currentPackage, onSave, onClose }) => {
             <input
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)} // Name güncelleniyor
               required
             />
           </div>
@@ -149,9 +151,7 @@ const PackageModal = ({ package: currentPackage, onSave, onClose }) => {
             <label>Question Count</label>
             <input
               type="number"
-              value={count}
-              onChange={(e) => setCount(Number(e.target.value))}
-              required
+              value={count} // Dinamik olarak count güncelleniyor
               readOnly
             />
           </div>
@@ -162,5 +162,6 @@ const PackageModal = ({ package: currentPackage, onSave, onClose }) => {
     </div>
   );
 };
+
 
 export default ManageQuestionPackage;

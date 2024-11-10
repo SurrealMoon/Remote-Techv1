@@ -64,12 +64,14 @@ const AdminPanel = () => {
                     <>
                         <header className="interview-header">
                             <h1>Interview List</h1>
+                            <button
+                                className="create-interview-btn"
+                                onClick={() => setShowModal(true)}
+                            >
+                                Add Interview
+                            </button>
                         </header>
-                        {interviews.length === 0 ? (
-                            <div>No interviews yet</div>
-                        ) : (
-                            <InterviewList interviews={interviews} />
-                        )}
+                        <InterviewList interviews={interviews} onAddInterview={addInterview} />
                     </>
                 )}
 

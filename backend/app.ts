@@ -6,6 +6,8 @@ import cors from 'cors';
 import questionPackageRoutes from './src/routes/questionPackageRoutes';
 import adminLoginRoutes from './src/routes/adminLoginRoutes';
 import createMasterAdmin from './src/services/adminService';
+import interviewRoutes from './src/routes/interviewRoutes';
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,5 +29,7 @@ app.use(express.json());
 // API route'larını cors'tan sonra kullanın
 app.use('/api', questionPackageRoutes);
 app.use('/api', adminLoginRoutes);
+app.use('/api', interviewRoutes);
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

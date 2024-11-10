@@ -28,7 +28,7 @@
 }
 
 /* Buton Ayarları */
-.see-videos-btn, .edit-btn, .delete-btn {
+.see-videos-btn, .edit-btn, .delete-btn, .create-interview-btn {
     margin-right: 10px;
     padding: 8px 12px;
     border: none;
@@ -64,13 +64,6 @@
     background-color: #c82333;
 }
 
-/* No Interviews Mesajı */
-.no-interviews {
-    color: white;
-    text-align: center;
-    padding: 40px;
-}
-
 /* Create Interview Butonu */
 .create-interview-btn {
     background-color: #28a745;
@@ -84,4 +77,11 @@
 
 .create-interview-btn:hover {
     background-color: #218838;
+}
+
+/* No Interviews Mesajı */
+.no-interviews {
+    color: white;
+    text-align: center;
+    padding: 40px;
 }

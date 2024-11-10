@@ -1,55 +1,85 @@
 import React, { useState, useEffect } from 'react';
 import './CreateInterviewModal.css';
+import useInterviewStore from '../stores/useInterviewStore';
+import { fetchQuestionPackages } from '../services/questionPackageService';
+import { updateInterview } from '../services/interviewService';
 
-const CreateInterviewModal = ({ onAddInterview, onClose, initialData }) => {
+
+// Tarihi uygun formata çevirme işlevi
+const formatDateForInput = (date) => {
+    if (!date) return '';
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
+
+const CreateInterviewModal = ({ onClose, initialData }) => {
     const [title, setTitle] = useState(initialData?.title || '');
     const [selectedPackage, setSelectedPackage] = useState(initialData?.selectedPackage || '');
-    const [date, setDate] = useState(initialData?.date || '');
+    const [date, setDate] = useState(formatDateForInput(initialData?.date || ''));
     const [canSkip, setCanSkip] = useState(initialData?.canSkip || false);
     const [showAtOnce, setShowAtOnce] = useState(initialData?.showAtOnce || false);
     const [packages, setPackages] = useState([]);
-    const [customQuestions, setCustomQuestions] = useState(initialData?.customQuestions || ['']);
+    const [customQuestions, setCustomQuestions] = useState(initialData?.customQuestions || []);
 
-    const handleClickOutside = (e) => {
-        if (e.target.className === 'modal-overlay') {
-            onClose();
-        }
-    };
+    const addInterview = useInterviewStore((state) => state.addInterview);
 
     useEffect(() => {
-        const storedPackages = JSON.parse(localStorage.getItem('questionPackages')) || [];
-        setPackages(storedPackages);
-
-        window.addEventListener('click', handleClickOutside);
-        return () => {
-            window.removeEventListener('click', handleClickOutside);
+        const loadPackages = async () => {
+            try {
+                const data = await fetchQuestionPackages();
+                setPackages(data);
+            } catch (error) {
+                console.error('Error fetching question packages:', error);
+            }
         };
+
+        loadPackages();
     }, []);
 
-    const handleSubmit = () => {
+    // initialData değiştiğinde tarihi güncelleyin
+    useEffect(() => {
+        if (initialData?.date) {
+            setDate(formatDateForInput(initialData.date));
+        }
+    }, [initialData]);
+
+    const handleSubmit = async () => {
         if (!title || !selectedPackage || !date) {
             alert('Please fill in all required fields');
             return;
         }
-
+    
+        const formattedDate = new Date(date).toISOString();
+    
         const newInterview = {
-            id: initialData ? initialData.id : Date.now(), // ID oluşturuluyor
             title,
-            selectedPackage,
-            date,
+            date: formattedDate,
             canSkip,
             showAtOnce,
+            selectedPackage,
             customQuestions
         };
-
-        // Yeni mülakatı localStorage'a ekleme
-        const interviews = JSON.parse(localStorage.getItem('interviews')) || [];
-        interviews.push(newInterview);
-        localStorage.setItem('interviews', JSON.stringify(interviews));
-
-        onAddInterview(newInterview); // Yeni mülakatı ekle
-        onClose();
+    
+        try {
+            if (initialData && (initialData.id || initialData._id)) {
+                // Mülakat güncelleme işlemi, geçerli bir ID varsa
+                await updateInterview(initialData.id || initialData._id, newInterview);
+            } else {
+                // Yeni mülakat ekleme işlemi
+                await addInterview(newInterview);
+            }
+            onClose();
+        } catch (error) {
+            console.error('Error while saving interview:', error);
+            alert('There was an error saving the interview. Please try again.');
+        }
     };
+    
 
     const handleAddQuestion = () => {
         setCustomQuestions([...customQuestions, '']);
@@ -62,16 +92,17 @@ const CreateInterviewModal = ({ onAddInterview, onClose, initialData }) => {
     };
 
     return (
-        <div className="modal-overlay">
+        <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && onClose()}>
             <div className="modal-content">
                 <h2>{initialData ? 'Edit Interview' : 'Create Interview'}</h2>
-                
+
                 <label>Title</label>
                 <input 
                     type="text" 
                     value={title} 
                     onChange={(e) => setTitle(e.target.value)} 
                     placeholder="Enter interview title" 
+                    required
                 />
 
                 <label>Select Question Package</label>
@@ -80,16 +111,17 @@ const CreateInterviewModal = ({ onAddInterview, onClose, initialData }) => {
                     onChange={(e) => setSelectedPackage(e.target.value)}
                 >
                     <option value="">Select a package</option>
-                    {packages.map((pkg, index) => (
-                        <option key={index} value={pkg.name}>{pkg.name}</option>
+                    {packages.map((pkg) => (
+                        <option key={pkg._id} value={pkg._id}>{pkg.packageName}</option>
                     ))}
                 </select>
 
                 <label>Interview Date</label>
                 <input 
-                    type="date" 
+                    type="datetime-local" 
                     value={date} 
                     onChange={(e) => setDate(e.target.value)} 
+                    required
                 />
 
                 <div className="checkbox-group">
@@ -128,7 +160,7 @@ const CreateInterviewModal = ({ onAddInterview, onClose, initialData }) => {
 
                 <button 
                     className="create-btn" 
-                    onClick={handleSubmit} 
+                    onClick={handleSubmit}
                     disabled={!title || !selectedPackage || !date}
                 >
                     {initialData ? 'Save' : 'Create'}

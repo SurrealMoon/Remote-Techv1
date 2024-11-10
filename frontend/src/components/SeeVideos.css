@@ -1,0 +1,64 @@
+/* src/components/SeeVideos.css */
+
+/* Genel sayfa düzeni */
+.video-page {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #ffffff; /* Beyaz arka plan */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: #333; /* Koyu gri yazı rengi */
+    text-align: center;
+  }
+  
+  /* Sayfa başlığı */
+  .video-page h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333; /* Başlık rengi */
+    font-weight: 600;
+  }
+  
+  /* Video listesi */
+  .video-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Videolar arasında boşluk */
+  }
+  
+  /* Video öğesi */
+  .video-item {
+    background-color: #f9f9f9; /* Hafif gri arka plan */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  
+  .video-item:hover {
+    transform: scale(1.02); /* Hover yapıldığında hafif büyüme */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Hover gölge efekti */
+  }
+  
+  /* Video başlığı */
+  .video-item h3 {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  /* Video oynatıcı */
+  .video-item video {
+    width: 100%;
+    border-radius: 8px;
+    outline: none;
+  }
+  
+  /* Henüz video yok mesajı */
+  .no-videos {
+    color: #777;
+    font-size: 1rem;
+    font-style: italic;
+  }
+  
