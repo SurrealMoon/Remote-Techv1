@@ -46,6 +46,7 @@ export const updateInterview = async (req: Request, res: Response) => {
     }
 };
 
+
 // Mülakat Silme
 export const deleteInterview = async (req: Request, res: Response) => {
     const { id } = req.params;

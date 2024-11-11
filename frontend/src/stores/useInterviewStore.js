@@ -34,7 +34,7 @@ const useInterviewStore = create((set) => ({
             const updatedInterview = await updateInterview(interviewId, interviewData);
             set((state) => ({
                 interviews: state.interviews.map((interview) => 
-                    interview._id === interviewId ? updatedInterview : interview
+                    interview._id.toString() === interviewId.toString() ? updatedInterview : interview
                 ),
                 error: null,
             }));
@@ -47,16 +47,16 @@ const useInterviewStore = create((set) => ({
     // Mülakat silme
     removeInterview: async (interviewId) => {
         try {
-            await deleteInterview(interviewId); // API'ye istek gönderiliyor mu kontrol edin
+            await deleteInterview(interviewId);
             set((state) => ({
                 interviews: state.interviews.filter(interview => interview._id !== interviewId),
                 error: null,
             }));
         } catch (error) {
             set({ error: error.message });
-            console.error('Error deleting interview:', error); // Hata konsola yazılır
+            console.error('Error deleting interview:', error);
         }
-    },
+    }    
     
 }));
 

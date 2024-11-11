@@ -17,7 +17,7 @@ const formatDateForInput = (date) => {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
 
-const CreateInterviewModal = ({ onClose, initialData }) => {
+const CreateInterviewModal = ({ onClose, onAddInterview, initialData }) => {
     const [title, setTitle] = useState(initialData?.title || '');
     const [selectedPackage, setSelectedPackage] = useState(initialData?.selectedPackage || '');
     const [date, setDate] = useState(formatDateForInput(initialData?.date || ''));
@@ -57,6 +57,7 @@ const CreateInterviewModal = ({ onClose, initialData }) => {
         const formattedDate = new Date(date).toISOString();
     
         const newInterview = {
+            _id: initialData?._id, // Güncellenen mülakata geçerli bir _id değeri ekleme
             title,
             date: formattedDate,
             canSkip,
@@ -66,11 +67,11 @@ const CreateInterviewModal = ({ onClose, initialData }) => {
         };
     
         try {
-            if (initialData && (initialData.id || initialData._id)) {
-                // Mülakat güncelleme işlemi, geçerli bir ID varsa
-                await updateInterview(initialData.id || initialData._id, newInterview);
+            if (initialData && initialData._id) {
+                // Mülakat güncelleme
+                await onAddInterview(newInterview);
             } else {
-                // Yeni mülakat ekleme işlemi
+                // Yeni mülakat ekleme
                 await addInterview(newInterview);
             }
             onClose();
@@ -79,6 +80,7 @@ const CreateInterviewModal = ({ onClose, initialData }) => {
             alert('There was an error saving the interview. Please try again.');
         }
     };
+    
     
 
     const handleAddQuestion = () => {

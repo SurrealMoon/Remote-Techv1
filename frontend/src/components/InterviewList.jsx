@@ -32,7 +32,6 @@ const InterviewList = () => {
 
   const handleSaveEdit = async (updatedInterview) => {
     await editInterview(updatedInterview._id, updatedInterview); // Store üzerinden düzenleme işlevini çağır
-    loadInterviews(); // Güncelleme sonrasında mülakatları tekrar yükleyin
     setIsModalOpen(false); // Modalı kapat
     setEditInterviewData(null);
   };
@@ -71,14 +70,14 @@ const InterviewList = () => {
       )}
 
       {isModalOpen && (
-        <CreateInterviewModal
-          onAddInterview={editInterviewData ? handleSaveEdit : handleAddInterview}
-          onClose={() => {
-            setEditInterviewData(null);
-            setIsModalOpen(false);
-          }}
-          initialData={editInterviewData}
-        />
+      <CreateInterviewModal
+      onAddInterview={editInterviewData ? handleSaveEdit : handleAddInterview}
+      onClose={() => {
+          setEditInterviewData(null);
+          setIsModalOpen(false);
+      }}
+      initialData={editInterviewData}
+  />
       )}
     </div>
   );
