@@ -22,10 +22,11 @@ const useManageQuestionStore = create((set) => ({
     // Soru güncelleme
     updateQuestionInPackage: async (packageId, questionId, questionData) => {
         try {
-            const updatedQuestion = await updateQuestion(packageId, questionId, questionData);
+            const updatedQuestion = await updateQuestion(packageId, questionId, questionData); // API’den gelen güncellenmiş soru
+    
             set((state) => ({
                 questions: state.questions.map((q) =>
-                    q._id === questionId ? updatedQuestion : q
+                    q._id.toString() === questionId.toString() ? updatedQuestion : q // Kimlik uyumu
                 ),
                 error: null,
             }));
@@ -33,7 +34,7 @@ const useManageQuestionStore = create((set) => ({
             set({ error: error.message });
         }
     },
-
+    
     // Soru silme
     deleteQuestionFromPackage: async (packageId, questionId) => {
         try {

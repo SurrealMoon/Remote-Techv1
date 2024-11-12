@@ -1,89 +1,149 @@
-/* InterviewRecordingPage.css */
 .interview-recording-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background-color: #f4f4f9;
-  font-family: 'Arial', sans-serif;
   padding: 20px;
+  font-family: 'Arial', sans-serif;
+  width: 100vw;
+  height: 100vh;
+  background-color: #1c1c1c; /* Daha koyu bir arka plan */
 }
 
-.interview-recording-page h2 {
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 10px;
-  font-weight: 600;
-}
-
-.interview-recording-page p {
-  font-size: 1.2rem;
-  color: #666;
-  margin-bottom: 20px;
-}
-
-.interview-recording-page .timer {
-  font-size: 1.5rem;
-  color: #ff4b5c;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
-.interview-recording-page video {
-  width: 80%;
-  max-width: 700px;
-  margin-bottom: 20px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.interview-recording-page .button-container {
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8); /* Daha koyu arka plan */
   display: flex;
   justify-content: center;
-  gap: 15px;
+  align-items: center;
 }
 
-.interview-recording-page button {
-  padding: 12px 20px;
-  font-size: 1rem;
-  color: white;
-  background-color: #007bff;
+.popup-content {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 90%;
+  text-align: center; /* Başlık ve içerik ortalanmış */
+}
+
+.progress-bar-container {
+  width: 80%;
+  height: 20px; /* Barın yüksekliği arttırıldı */
+  background-color: #555; /* Koyu gri */
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #4caf50; /* Canlı yeşil bar */
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  transition: width 0.5s; /* Geçiş efekti */
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  gap: 20px;
+}
+
+.video-container {
+  background: #000;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 100%; /* Video alanının genişliği */
+  height: 400px; /* Video alanının yüksekliği */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.info-container {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #333;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.question-timer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px; /* Font boyutu arttırıldı */
+  color: #444; /* Daha açık bir renk */
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.skip-button, .start-button {
+  flex: 1;
+  padding: 12px; /* Buton boyutları arttırıldı */
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 16px; /* Font boyutu arttırıldı */
+  transition: background-color 0.3s;
 }
 
-.interview-recording-page button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+.skip-button {
+  background: #bbb; /* Daha açık gri */
+  color: #333;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.interview-recording-page button:hover:not(:disabled) {
-  background-color: #0056b3;
-  transform: scale(1.05);
+.start-button {
+  background: #4caf50; /* Yeşil */
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.interview-recording-page button:active {
-  transform: scale(0.98);
+.start-button:hover {
+  background: #45a049; /* Hover durumu */
 }
 
-.interview-recording-page button.stop-btn {
-  background-color: #dc3545;
+.skip-button:hover {
+  background: #a1a1a1; /* Hover durumu */
 }
 
-.interview-recording-page button.stop-btn:hover:not(:disabled) {
-  background-color: #c82333;
+/* Yeni eklenen öneri bölümü için stil */
+.suggestion-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-top: 10px;
 }
 
-.interview-recording-page button.stop-btn:disabled {
-  background-color: #f5c6cb;
-}
-
-.interview-recording-page .footer-text {
-  margin-top: 20px;
-  font-size: 0.9rem;
-  color: #999;
+.suggestion-text {
+  font-size: 16px;
+  color: #333;
+  text-align: center;
 }

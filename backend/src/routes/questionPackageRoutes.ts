@@ -8,7 +8,7 @@ import {
     updateQuestionInPackage,
     deleteQuestionFromPackage,
     reorderQuestionsInPackage,
-    getQuestionsInPackage // Bu satırı ekleyin
+    getQuestionsInPackage
 } from '../controllers/questionPackageController';
 
 const router = express.Router();
@@ -28,5 +28,7 @@ router.put('/question-packages/:packageId/questions/reorder', reorderQuestionsIn
 
 // Belirli bir paket kimliğine göre soruları getirme işlemi
 router.get('/question-packages/:packageId/questions', getQuestionsInPackage);
+
+
 
 export default router;

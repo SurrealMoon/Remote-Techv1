@@ -1,5 +1,5 @@
 import express from 'express';
-import { createInterview, getInterviews, getQuestionPackages, updateInterview, deleteInterview } from '../controllers/interviewController';
+import { createInterview, getInterviews, getQuestionPackages, updateInterview, deleteInterview, getInterviewById } from '../controllers/interviewController';
 
 
 const router = express.Router();
@@ -19,5 +19,8 @@ router.delete('/interviews/:id', deleteInterview);
 
 // Soru paketlerini çekme
 router.get('/question-packages', getQuestionPackages);
+
+// Mülakatı ID ile getir
+router.get('/interviews/:id', getInterviewById);
 
 export default router;

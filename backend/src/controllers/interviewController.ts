@@ -69,4 +69,20 @@ export const getQuestionPackages = async (req: Request, res: Response) => {
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
+
+};
+export const getInterviewById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const interview = await Interview.findById(id);
+        if (!interview) {
+            console.warn("Interview not found for ID:", id); // Mülakat bulunamadığında uyarı logu
+            return res.status(404).json({ message: 'Mülakat bulunamadı' });
+        }
+        // Mülakat bulunduğunda sadece hata çıkmadığı durumlarda işlemi başarıyla tamamlayın
+        res.status(200).json(interview);
+    } catch (error: any) {
+        console.error("Error fetching interview:", error.message); // Hata detayını loglayın
+        res.status(500).json({ message: 'Bir hata oluştu, lütfen tekrar deneyin.' });
+    }
 };

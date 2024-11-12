@@ -7,6 +7,8 @@ import questionPackageRoutes from './src/routes/questionPackageRoutes';
 import adminLoginRoutes from './src/routes/adminLoginRoutes';
 import createMasterAdmin from './src/services/adminService';
 import interviewRoutes from './src/routes/interviewRoutes';
+import candidateRoutes from './src/routes/candidateRoutes';
+
 
 
 const app = express();
@@ -30,6 +32,8 @@ app.use(express.json());
 app.use('/api', questionPackageRoutes);
 app.use('/api', adminLoginRoutes);
 app.use('/api', interviewRoutes);
+app.use('/api', candidateRoutes);
+
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
