@@ -59,16 +59,19 @@ const useManageQuestionStore = create((set) => ({
     },
 
     // Soruları paket kimliğine göre yeniden yükleme
-    fetchQuestionsFromServer: async (packageId) => {
-        try {
-            const questions = await fetchQuestions(packageId); // fetchQuestions işlevi çağrılır
-            set({ questions, error: null });
-            return questions; // Yüklenen soruları döndür
-        } catch (error) {
-            set({ error: error.message });
-            return [];
-        }
-    },
+// useManageQuestionStore.js içinde fetchQuestionsFromServer fonksiyonunda
+fetchQuestionsFromServer: async (packageId) => {
+    try {
+        const questions = await fetchQuestions(packageId);
+        console.log("Fetched questions with time:", questions); // Bu satır eklendi
+        set({ questions, error: null });
+        return questions;
+    } catch (error) {
+        set({ error: error.message });
+        return [];
+    }
+},
+
 }));
 
 export default useManageQuestionStore;

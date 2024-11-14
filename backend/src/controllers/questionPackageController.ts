@@ -69,7 +69,7 @@ export const deleteQuestionPackage = async (req: Request, res: Response) => {
 // Soru ekleme
 export const addQuestionToPackage = async (req: Request, res: Response) => {
     const { packageId } = req.params;
-    const { questionText, options = [], answer = "", time = 2 } = req.body
+    const { questionText, options = [], answer = "", time } = req.body; // Varsayılan süreyi burada kaldırıyoruz
 
     try {
         const questionPackage = await QuestionPackage.findById(packageId);
@@ -81,8 +81,8 @@ export const addQuestionToPackage = async (req: Request, res: Response) => {
             questionText,
             options,
             answer,
-            time: time || 2, // Varsayılan süre 2 dakika
-            order: questionPackage.questions.length + 1 // Yeni soru en son sıraya eklenir
+            time: time || 2, // Eğer kullanıcı belirtmezse süre 2 dakika olsun
+            order: questionPackage.questions.length + 1
         };
 
         questionPackage.questions.push(newQuestion);
@@ -91,7 +91,7 @@ export const addQuestionToPackage = async (req: Request, res: Response) => {
 
         res.status(200).json(newQuestion);
     } catch (error) {
-        console.error('Error in addQuestionToPackage:', error); // Hata mesajını terminalde görmek için
+        console.error('Error in addQuestionToPackage:', error);
         res.status(500).json({ message: (error as Error).message });
     }
 };
