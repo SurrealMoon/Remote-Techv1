@@ -9,6 +9,8 @@ import createMasterAdmin from './src/services/adminService';
 import interviewRoutes from './src/routes/interviewRoutes';
 import candidateRoutes from './src/routes/candidateRoutes';
 import videoRoutes from './src/routes/videoRoutes';
+import uploadedVideosRoutes from './src/routes/uploadedVideosRoutes';
+
 
 
 
@@ -36,6 +38,8 @@ app.use('/api', adminLoginRoutes);
 app.use('/api', interviewRoutes);
 app.use('/api', candidateRoutes);
 app.use('/api', videoRoutes);
+app.use('/api/uploaded-videos', uploadedVideosRoutes);
+
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

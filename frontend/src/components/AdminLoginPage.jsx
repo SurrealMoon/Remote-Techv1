@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../stores/authStore'; // authStore dosyasını içe aktarın
 import './AdminLoginPage.css';
-import loginIllustration from '../assets/login-illustration.png';
 
 const AdminLoginPage = () => {
-  const [username, setUsername] = useState(''); // Email yerine username kullanıyoruz
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login); // Store'dan login işlevini alın
@@ -13,11 +12,15 @@ const AdminLoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Username:", username);
-    console.log("Password:", password);
 
+    if (username.trim() === '' || password.trim() === '') {
+      alert('Kullanıcı adı ve şifre boş bırakılamaz.');
+      return;
+    }
 
-    // Store'daki login işlevini çağır
+    console.log('Username:', username);
+    console.log('Password:', password);
+
     const isLoggedIn = await login(username, password);
 
     if (isLoggedIn) {
@@ -27,36 +30,45 @@ const AdminLoginPage = () => {
 
   return (
     <div className="login-page">
-      <div className="login-container">
-        <div className="login-left">
-          <h2>Admin Log in Page</h2>
-          <form onSubmit={handleLogin} className="login-form">
-            <div className="input-group">
-              <label htmlFor="username">Kullanıcı Adı</label>
-              <input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </div>
-            <div className="input-group">
-              <label htmlFor="password">Password</label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit" className="login-button">Log in</button>
-          </form>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
-        </div>
-        <div className="login-right">
-          <img src={loginIllustration} alt="Login Illustration" />
+      <div className="container">
+        <div className="screen">
+          <div className="screen__content">
+            <form className="login" onSubmit={handleLogin}>
+              <div className="login__field">
+                <i className="login__icon fas fa-user"></i>
+                <input
+                  type="text"
+                  className="login__input"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="login__field">
+                <i className="login__icon fas fa-lock"></i>
+                <input
+                  type="password"
+                  className="login__input"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <button className="button login__submit" type="submit">
+                <span className="button__text">Log In</span>
+                <i className="button__icon fas fa-chevron-right"></i>
+              </button>
+            </form>
+            {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
+          </div>
+          <div className="screen__background">
+            <span className="screen__background__shape screen__background__shape4"></span>
+            <span className="screen__background__shape screen__background__shape3"></span>
+            <span className="screen__background__shape screen__background__shape2"></span>
+            <span className="screen__background__shape screen__background__shape1"></span>
+          </div>
         </div>
       </div>
     </div>

@@ -1,27 +1,38 @@
 :root {
-  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.8; /* Satır aralığını artırdık */
   font-weight: 400;
 
   color-scheme: light dark;
-  color: #213547;
+  color: #000000; /* Siyah yazı rengi */
   background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --primary-color: #00b2a9; /* Turkuaz */
+  --secondary-color: #ffd700; /* Sarı */
+  --background-color: #f5f5f5; /* Hafif gri */
+  --text-color: #000000; /* Siyah */
+  --input-background: #ffffff;
+  --input-border: #cccccc;
+  --card-background: #ffffff;
+  --button-background: #00b2a9;
+  --button-hover-background: #009688; /* Turkuazın koyu tonu */
+  --button-text-color: #ffffff;
 }
 
 a {
-  font-weight: 500;
-  color: #1F8A70;
-  text-decoration: inherit;
+  font-weight: 600; /* Yazıyı daha belirgin yaptık */
+  color: var(--primary-color); /* Link rengi turkuaz */
+  text-decoration: none;
   transition: color 0.3s ease;
 }
 
 a:hover {
-  color: #145A47;
+  color: var(--secondary-color); /* Hover durumunda sarı */
 }
 
 body {
@@ -32,113 +43,139 @@ body {
   justify-content: flex-start;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #f8f9fc;
-  color: #2a2e37;
+  background-color: var(--background-color);
+  color: var(--text-color); /* Siyah metin rengi */
   overflow-x: hidden;
   padding: 20px;
+  font-size: 16px; /* Genel metin boyutunu artırdık */
 }
 
 h1 {
-  font-size: 2.5em;
-  line-height: 1.2;
-  color: #1F8A70;
-  margin-bottom: 16px;
+  font-size: 2.6em; /* Daha büyük boyut */
+  line-height: 1.3; /* Satır aralığını artırdık */
+  color: var(--text-color); /* Siyah başlık rengi */
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 700; /* Daha kalın font ağırlığı */
 }
 
 h2, h3 {
-  color: #145A47;
-  margin-bottom: 12px;
+  color: var(--text-color); /* Siyah başlık rengi */
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.4; /* Satır aralığını artırdık */
 }
 
 button {
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
+  padding: 0.8em 1.5em;
+  font-size: 1.1em; /* Buton metnini büyüttük */
+  font-weight: 600; /* Daha kalın font ağırlığı */
   font-family: inherit;
-  background-color: #1F8A70;
-  color: #ffffff;
+  background-color: var(--button-background);
+  color: var(--button-text-color); /* Beyaz buton yazısı */
   cursor: pointer;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #145A47;
-  border-color: #0f3d33;
+  background-color: var(--button-hover-background);
 }
 
 button:focus,
 button:focus-visible {
-  outline: 4px auto rgba(31, 138, 112, 0.5);
+  outline: 4px auto rgba(0, 178, 169, 0.5);
 }
 
 input, select {
-  padding: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background-color: #ffffff;
-  color: #333;
-  font-size: 1em;
+  padding: 12px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background-color: var(--input-background);
+  color: var(--text-color); /* Siyah yazı rengi */
+  font-size: 1.1em; /* Form elemanları yazı boyutunu büyüttük */
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
-  max-width: 400px;
-  margin-bottom: 16px;
+  max-width: 450px;
+  margin-bottom: 20px;
 }
 
 input:focus, select:focus {
-  border-color: #1F8A70;
-  box-shadow: 0 0 0 3px rgba(31, 138, 112, 0.15);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(0, 178, 169, 0.15);
   outline: none;
 }
 
 textarea {
-  padding: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background-color: #ffffff;
-  color: #333;
-  font-size: 1em;
+  padding: 12px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background-color: var(--input-background);
+  color: var(--text-color); /* Siyah yazı rengi */
+  font-size: 1.1em;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
-  max-width: 400px;
-  height: 100px;
-  margin-bottom: 16px;
+  max-width: 450px;
+  height: 120px;
+  margin-bottom: 20px;
 }
 
 textarea:focus {
-  border-color: #1F8A70;
-  box-shadow: 0 0 0 3px rgba(31, 138, 112, 0.15);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(0, 178, 169, 0.15);
   outline: none;
 }
 
 .card {
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-bottom: 20px;
+  background-color: var(--card-background);
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  margin-bottom: 25px;
   width: 100%;
-  max-width: 600px;
+  max-width: 650px;
+  font-size: 1.1em; /* Kart içeriği yazı boyutunu büyüttük */
+  line-height: 1.5;
+  color: var(--text-color); /* Siyah kart içeriği */
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
+    color: #000000; /* Siyah yazılar */
     background-color: #ffffff;
   }
 
   a:hover {
-    color: #145A47;
+    color: var(--secondary-color); /* Hover durumda sarı */
   }
 
   button {
-    background-color: #f1f3f6;
-    color: #1F8A70;
+    background-color: #e8f8f7; /* Açık turkuaz */
+    color: var(--primary-color);
   }
 
   button:hover {
-    background-color: #e1e7eb;
-    color: #145A47;
+    background-color: #b2f0ea; /* Daha koyu açık turkuaz */
+    color: var(--secondary-color);
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 2rem; /* Mobilde başlık boyutunu küçülttük */
+  }
+
+  input, select, textarea {
+    max-width: 100%;
+  }
+
+  .card {
+    padding: 20px;
+    max-width: 100%;
   }
 }

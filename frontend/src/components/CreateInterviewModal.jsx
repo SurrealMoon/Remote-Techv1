@@ -2,10 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './CreateInterviewModal.css';
 import useInterviewStore from '../stores/useInterviewStore';
 import { fetchQuestionPackages } from '../services/questionPackageService';
-import { updateInterview } from '../services/interviewService';
 
-
-// Tarihi uygun formata çevirme işlevi
 const formatDateForInput = (date) => {
     if (!date) return '';
     const d = new Date(date);
@@ -24,7 +21,13 @@ const CreateInterviewModal = ({ onClose, onAddInterview, initialData }) => {
     const [canSkip, setCanSkip] = useState(initialData?.canSkip || false);
     const [showAtOnce, setShowAtOnce] = useState(initialData?.showAtOnce || false);
     const [packages, setPackages] = useState([]);
-    const [customQuestions, setCustomQuestions] = useState(initialData?.customQuestions || []);
+
+    const [customQuestions, setCustomQuestions] = useState(
+        initialData?.customQuestions?.map(q => 
+            typeof q === 'string' ? { questionText: q, time: 1 } : q
+        ) || []
+    );
+
 
     const addInterview = useInterviewStore((state) => state.addInterview);
 
@@ -37,11 +40,9 @@ const CreateInterviewModal = ({ onClose, onAddInterview, initialData }) => {
                 console.error('Error fetching question packages:', error);
             }
         };
-
         loadPackages();
     }, []);
 
-    // initialData değiştiğinde tarihi güncelleyin
     useEffect(() => {
         if (initialData?.date) {
             setDate(formatDateForInput(initialData.date));
@@ -54,10 +55,15 @@ const CreateInterviewModal = ({ onClose, onAddInterview, initialData }) => {
             return;
         }
     
+        if (customQuestions.some(q => !q.questionText || !q.time)) {
+            alert('Please fill in all custom question fields, including time.');
+            return;
+        }
+    
         const formattedDate = new Date(date).toISOString();
     
         const newInterview = {
-            _id: initialData?._id, // Güncellenen mülakata geçerli bir _id değeri ekleme
+            _id: initialData?._id,
             title,
             date: formattedDate,
             canSkip,
@@ -66,12 +72,12 @@ const CreateInterviewModal = ({ onClose, onAddInterview, initialData }) => {
             customQuestions
         };
     
+        console.log("Submitting Interview Data:", newInterview);
+    
         try {
             if (initialData && initialData._id) {
-                // Mülakat güncelleme
                 await onAddInterview(newInterview);
             } else {
-                // Yeni mülakat ekleme
                 await addInterview(newInterview);
             }
             onClose();
@@ -79,19 +85,18 @@ const CreateInterviewModal = ({ onClose, onAddInterview, initialData }) => {
             console.error('Error while saving interview:', error);
             alert('There was an error saving the interview. Please try again.');
         }
-    };
-    
+    };    
     
 
     const handleAddQuestion = () => {
-        setCustomQuestions([...customQuestions, '']);
-    };
+        setCustomQuestions([...customQuestions, { questionText: "", time: null }]); // Süre başlangıçta null
+    };    
 
-    const handleQuestionChange = (index, value) => {
+    const handleQuestionChange = (index, field, value) => {
         const updatedQuestions = [...customQuestions];
-        updatedQuestions[index] = value;
+        updatedQuestions[index][field] = value;
         setCustomQuestions(updatedQuestions);
-    };
+    };    
 
     return (
         <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && onClose()}>
@@ -149,12 +154,22 @@ const CreateInterviewModal = ({ onClose, onAddInterview, initialData }) => {
                 <div className="custom-questions-container">
                     {customQuestions.map((question, index) => (
                         <div key={index} className="custom-question">
-                            <input
-                                type="text"
-                                value={question}
-                                onChange={(e) => handleQuestionChange(index, e.target.value)}
-                                placeholder={`Question ${index + 1}`}
-                            />
+                       <input
+    type="text"
+    placeholder="Question Text"
+    value={question.questionText || ""}
+    onChange={(e) => handleQuestionChange(index, 'questionText', e.target.value)}
+    required
+/>
+<input
+    type="number"
+    placeholder="Time (minutes)"
+    value={question.time !== null ? question.time : ""}
+    onChange={(e) => handleQuestionChange(index, 'time', Number(e.target.value))}
+    required
+    min="1"
+/>
+
                         </div>
                     ))}
                 </div>

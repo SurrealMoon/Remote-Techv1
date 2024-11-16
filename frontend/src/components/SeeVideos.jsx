@@ -1,29 +1,15 @@
-// src/components/SeeVideos.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import './SeeVideos.css';
+import useVideoStore from '../stores/uploadedVideosStore';
 
-const SeeVideos = () => {
-  // selectedInterviewId ve interviews verilerini localStorage'dan alıyoruz
-  const selectedInterviewId = localStorage.getItem('selectedInterviewId');
-  const interviews = JSON.parse(localStorage.getItem('interviews')) || [];
-  
-  console.log("Selected Interview ID:", selectedInterviewId);
-  console.log("Fetched Interviews:", interviews);
+const SeeVideos = ({ interviewId }) => {
+  const { videos, fetchVideos } = useVideoStore();
 
-  // Seçilen mülakatı interviews dizisinden buluyoruz
-  const selectedInterview = interviews.find(
-    interview => interview.id.toString() === selectedInterviewId?.toString()
-  );
-
-  console.log("Selected Interview:", selectedInterview);
-
-  // Kayıtlı videoları localStorage'dan alıyoruz
-  const recordedVideos = JSON.parse(localStorage.getItem('recordedVideos')) || {};
-  const videos = Object.values(recordedVideos[selectedInterviewId] || {});
-
-  if (!selectedInterview || !selectedInterview.customQuestions || selectedInterview.customQuestions.length === 0) {
-    return <p>Selected interview is invalid or has no questions.</p>;
-  }
+  useEffect(() => {
+    if (interviewId) {
+      fetchVideos(interviewId);
+    }
+  }, [interviewId, fetchVideos]);
 
   return (
     <div className="video-page">
@@ -31,10 +17,10 @@ const SeeVideos = () => {
       {videos.length > 0 ? (
         <div className="video-list">
           {videos.map((video, index) => (
-            <div key={index} className="video-item">
+            <div key={video._id} className="video-item">
               <h3>Video {index + 1}</h3>
               <video width="400" controls>
-                <source src={video.src} type="video/mp4" />
+                <source src={video.videoUrl} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>

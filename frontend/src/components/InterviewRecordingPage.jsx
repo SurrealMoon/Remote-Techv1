@@ -5,22 +5,26 @@ import './InterviewRecordingPage.css';
 import { getInterviewById, getQuestionsInPackage } from '../services/interviewService';
 import useCandidateStore from '../stores/useCandidateStore';
 
+
 const uploadVideo = async (file) => {
     const formData = new FormData();
-    formData.append('video', file);
+    formData.append('video', file, 'recorded-video.webm'); // Dosya adı eklendi
+
+    console.log("Uploading video file:", file);
+    console.log("FormData:", [...formData.entries()]);
 
     try {
-        const response = await fetch('http://localhost:3000/api/upload', {
+        const response = await fetch('http://localhost:3000/api/upload', { // Backend URL doğru olmalı
             method: 'POST',
             body: formData,
         });
 
         if (response.ok) {
             const { videoUrl } = await response.json();
-            console.log('Video URL:', videoUrl); // Video URL'sini döndürür
+            console.log('Video URL:', videoUrl);
             return videoUrl;
         } else {
-            const errorText = await response.text(); // Sunucudan gelen hata mesajını al
+            const errorText = await response.text();
             console.error("Server error response:", errorText);
             throw new Error('Video yüklenemedi');
         }
@@ -34,13 +38,15 @@ const CandidateInfoPopup = ({ onClose, interviewId }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const addCandidate = useCandidateStore((state) => state.addCandidate);
     const error = useCandidateStore((state) => state.error);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (firstName && lastName && email) {
-            const candidateInfo = { firstName, lastName, email, interviewId };
+        const kvkkChecked = document.getElementById('kvkk').checked;
+        if (firstName && lastName && email && phoneNumber && kvkkChecked) {
+            const candidateInfo = { firstName, lastName, email, phoneNumber, interviewId };
             try {
                 await createCandidate(candidateInfo); 
                 onClose(candidateInfo);
@@ -53,30 +59,53 @@ const CandidateInfoPopup = ({ onClose, interviewId }) => {
                 }
             }
         } else {
-            alert('Lütfen tüm alanları doldurun.');
+            alert('Lütfen tüm alanları doldurun ve KVKK onayını kabul edin.');
         }
     };
 
     return (
         <div className="popup-overlay">
             <div className="popup-content">
-                <h2>Kişisel Bilgilerinizi Girin</h2>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <label>İsim</label>
-                        <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                    </div>
-                    <div>
-                        <label>Soyisim</label>
-                        <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                    </div>
-                    <div>
-                        <label>Email</label>
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    </div>
-                    <button type="submit">Onayla</button>
+                <h2 className="popup-header">Kişisel Bilgilerinizi Girin</h2>
+                <form onSubmit={handleSubmit} className="popup-input-container">
+                    <input 
+                        type="text" 
+                        className="popup-input" 
+                        placeholder="İsim" 
+                        value={firstName} 
+                        onChange={(e) => setFirstName(e.target.value)} 
+                    />
+                    <input 
+                        type="text" 
+                        className="popup-input" 
+                        placeholder="Soyisim" 
+                        value={lastName} 
+                        onChange={(e) => setLastName(e.target.value)} 
+                    />
+                    <input 
+                        type="email" 
+                        className="popup-input" 
+                        placeholder="Email" 
+                        value={email} 
+                        onChange={(e) => setEmail(e.target.value)} 
+                    />
+                    <input 
+                        type="tel" 
+                        className="popup-input" 
+                        placeholder="Telefon Numarası" 
+                        value={phoneNumber} 
+                        onChange={(e) => setPhoneNumber(e.target.value)} 
+                    />
+                    <button type="submit" className="popup-button">Onayla</button>
                 </form>
                 {error && <p className="error">{error}</p>}
+                <div className="kvkk-container">
+                    <p>Kişisel Verilerinizin Korunması Kanunu (KVKK) metnini okuyarak onayladığınızı belirtirsiniz.</p>
+                    <div className="kvkk-checkbox">
+                        <input type="checkbox" id="kvkk" />
+                        <label htmlFor="kvkk">KVKK metnini onaylıyorum</label>
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -99,90 +128,176 @@ const InterviewRecordingPage = ({ onSubmit }) => {
             try {
                 const interviewData = await getInterviewById(interviewId);
                 const packageQuestions = await getQuestionsInPackage(interviewData.selectedPackage);
+        
+                // Package Questions düzeltme
+                const formattedPackageQuestions = packageQuestions.map((q) => ({
+                    ...q,
+                    time: q.time / 60, // Saniyeyi dakikaya çevirme! Eğer zaten doğruysa, bu satırı düzelt
+                }));
+        
+                // Debugging: Soru paketinden gelen soruların zamanlarını loglayalım
+                console.log("Formatted Package Questions:", formattedPackageQuestions);
+        
                 const formattedCustomQuestions = interviewData.customQuestions.map((q, index) => ({
-                    questionText: q,
+                    questionText: q.questionText,
                     options: [],
                     answer: null,
-                    time: 1,
-                    order: packageQuestions.length + index + 1,
+                    time: q.time, // Custom questions zaten doğru formattaysa
+                    order: formattedPackageQuestions.length + index + 1,
                 }));
-
-                setQuestions([...packageQuestions, ...formattedCustomQuestions]);
+        
+                const allQuestions = [...formattedPackageQuestions, ...formattedCustomQuestions];
+                setQuestions(allQuestions);
+        
+                console.log("Loaded questions in fetchInterview:", allQuestions);
             } catch (error) {
                 console.error("Error fetching interview or questions:", error);
                 alert("Mülakat veya soru paketi bulunamadı.");
             }
         };
-
+        
+    
         if (interviewId) fetchInterview();
     }, [interviewId]);
 
     useEffect(() => {
-        if (!recording || showEndPopup) return;
-
-        const currentQuestionTime = questions[currentQuestionIndex]?.time * 60 || 60;
+        if (questions.length > 0) {
+        }
+    }, [questions]);
+    
+    useEffect(() => {
+        if (!recording || showEndPopup || questions.length === 0) return;
+    
+        const currentQuestionTime = questions[currentQuestionIndex]?.time * 60 || 60; // Süreyi saniyeye çevir
         let localTimer = 0;
-
+    
         const interval = setInterval(() => {
             localTimer++;
             setTimer(localTimer);
-
+    
             if (localTimer >= currentQuestionTime) {
                 clearInterval(interval);
                 handleNextQuestion();
             }
         }, 1000);
-
+    
         return () => clearInterval(interval);
     }, [recording, currentQuestionIndex, questions, showEndPopup]);
+    
 
     const startRecording = () => {
         navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-            .then(stream => {
+            .then((stream) => {
+                console.log("Media stream acquired:", stream);
                 videoRef.current.srcObject = stream;
-                const mediaRecorder = new MediaRecorder(stream);
+    
+                const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp8,opus' });
                 mediaRecorderRef.current = mediaRecorder;
-
-                mediaRecorder.ondataavailable = event => {
-                    if (event.data.size > 0) {
-                        setRecordedChunks(prev => [...prev, event.data]);
+    
+                mediaRecorder.ondataavailable = (event) => {
+                    console.log("ondataavailable called");
+                    if (event.data && event.data.size > 0) {
+                        console.log("Chunk size:", event.data.size);
+                        setRecordedChunks((prev) => {
+                            const updatedChunks = [...prev, event.data];
+                            console.log("Updated recordedChunks:", updatedChunks);
+                            return updatedChunks;
+                        });
+                    } else {
+                        console.warn("No data chunk available or empty.");
                     }
                 };
-                mediaRecorder.start();
+    
+                mediaRecorder.onstop = () => {
+                    console.log("MediaRecorder stopped. Final recorded chunks:", recordedChunks);
+                };
+    
+                mediaRecorder.start(1000); // Her 1 saniyede bir veri parçası al
+                console.log("MediaRecorder started with timeslice.");
                 setRecording(true);
             })
-            .catch(() => alert('Unable to access camera. Please ensure permissions are enabled.'));
+            .catch((err) => {
+                console.error("Failed to access media devices:", err);
+                alert("Kamera veya mikrofon erişim izni reddedildi. Lütfen izin verin ve tekrar deneyin.");
+            });
     };
+    
 
     const stopRecording = async () => {
-        if (mediaRecorderRef.current) {
+        if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+            console.log("Stopping MediaRecorder...");
             mediaRecorderRef.current.stop();
         }
+    
         if (videoRef.current.srcObject) {
-            videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+            console.log("Stopping video stream...");
+            videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
         }
         setRecording(false);
-
-        const videoBlob = new Blob(recordedChunks, { type: 'video/mp4' });
-        await uploadVideo(videoBlob); // Mülakat sonlandığında videoyu yükler
+    
+        console.log("Final recordedChunks:", recordedChunks);
+        if (recordedChunks.length === 0) {
+            console.error("No recorded video chunks available.");
+            alert("Video kaydedilmedi. Lütfen tekrar deneyin.");
+            return;
+        }
+    
+        const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
+        console.log("Recorded video blob size:", videoBlob.size);
+    
+        if (videoBlob.size === 0) {
+            console.error("Recorded video is empty.");
+            alert("Video kaydedilmedi. Lütfen tekrar deneyin.");
+            return;
+        }
+    
+        try {
+            await uploadVideo(videoBlob);
+        } catch (error) {
+            console.error("Video upload failed:", error);
+        }
     };
+    
 
     const handleNextQuestion = () => {
         const nextIndex = currentQuestionIndex + 1;
-
+    
         if (nextIndex < questions.length) {
             setCurrentQuestionIndex(nextIndex);
             setTimer(0);
+            console.log("Moving to next question:", questions[nextIndex]?.questionText);
         } else {
             stopRecording();
             setShowEndPopup(true);
         }
     };
+    
 
-    const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-
+    const calculateTotalTime = () => {
+        if (questions.length === 0) {
+            return 0; // Eğer soru yoksa toplam süreyi 0 döndür
+        }
+    
+      
+    
+        return questions.reduce((total, question) => {
+            const questionTime = (question.time || 0) * 60; // Dakikayı saniyeye çevir
+            return total + questionTime; // Saniye cinsinden topla
+        }, 0);
+    };
+    
+    const totalTime = questions.length > 0 ? calculateTotalTime() : 0;
+    const progress = questions.length > 0 ? ((currentQuestionIndex + 1) / questions.length) * 100 : 0;
+    
+    
+    
     return (
         <div className="interview-recording-page">
+            <div className="background-circles">
+                {[...Array(12)].map((_, index) => (
+                    <div key={index} className="circle"></div>
+                ))}
+            </div>
             {!candidateInfo && <CandidateInfoPopup onClose={setCandidateInfo} interviewId={interviewId} />}
             {candidateInfo && (
                 <div className="content">
@@ -194,9 +309,9 @@ const InterviewRecordingPage = ({ onSubmit }) => {
                     </div>
                     <div className="info-container">
                         <h3>Soru {currentQuestionIndex + 1}: {questions[currentQuestionIndex]?.questionText}</h3>
-                        <div className="timers">
-                            <div>Question Time: <span>{timer}s</span></div>
-                            <div>Total Time: <span>{questions.length * 60}s</span></div>
+                        <div className="question-timer">
+                            <div>Kalan Süre: <span>{timer}s</span></div>
+                            <div>Toplam Süre: <span>{totalTime}s</span></div>
                         </div>
                         <div className="buttons">
                             <button className="skip-button" onClick={handleNextQuestion}>Next</button>
@@ -217,6 +332,6 @@ const InterviewRecordingPage = ({ onSubmit }) => {
             )}
         </div>
     );
-};
+};    
 
 export default InterviewRecordingPage;
