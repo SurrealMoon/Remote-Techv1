@@ -27,10 +27,13 @@ const ManageQuestionPackage = () => {
   };
 
   const handleEditPackage = (pkg) => {
-    setCurrentPackage(pkg);
-    setModalOpen(true);
-  };
-
+    if (pkg && pkg.id) {
+        setCurrentPackage(pkg); // `pkg` id'si varsa `currentPackage`'i doğru ayarla
+        setModalOpen(true);
+    } else {
+        console.error("Package ID is missing:", pkg);
+    }
+};
   const handleDeletePackage = (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this package?");
     if (confirmDelete) {
@@ -39,17 +42,16 @@ const ManageQuestionPackage = () => {
   };
 
   const handleSave = (name, count) => {
-    if (currentPackage && currentPackage.id !== null) {
+    if (currentPackage && currentPackage.id) {
         // Güncelleme işlemi
-        updatePackage(currentPackage.id, { packageName: name, questionCount: count }); // `name` yerine `packageName` olarak değiştirildi
+        updatePackage(currentPackage.id, { packageName: name, questionCount: count });
     } else {
         // Yeni paket ekleme işlemi
-        addPackage({ packageName: name, questionCount: count, questions: [] }); // `name` yerine `packageName`
+        addPackage({ packageName: name, questionCount: count, questions: [] });
     }
     setModalOpen(false);
     setCurrentPackage(null);
 };
-
   const handleManageQuestions = (pkg) => {
     setSelectedPackage(pkg); // `pkg` nesnesinin tamamını seçilen paket olarak atıyoruz
   };

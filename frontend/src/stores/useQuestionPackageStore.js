@@ -13,7 +13,11 @@ const useQuestionPackageStore = create((set) => ({
     fetchPackages: async () => {
         try {
             const packages = await getQuestionPackages();
-            set({ packages });
+            const formattedPackages = packages.map((pkg) => ({
+                ...pkg,
+                id: pkg._id, // `_id`'yi `id` olarak yeniden adlandır
+            }));
+            set({ packages: formattedPackages });
         } catch (error) {
             set({ error: error.message });
         }
@@ -22,28 +26,26 @@ const useQuestionPackageStore = create((set) => ({
     addPackage: async (data) => {
         try {
             const newPackage = await createQuestionPackage({
-                packageName: data.packageName, // name yerine packageName kullanımı
+                packageName: data.packageName,
                 questionCount: data.questionCount || 0,
                 questions: data.questions || [],
             });
-            set((state) => ({ packages: [...state.packages, newPackage], error: null }));
+            set((state) => ({ packages: [...state.packages, { ...newPackage, id: newPackage._id }], error: null }));
         } catch (error) {
             set({ error: error.message });
         }
     },
-    
 
     updatePackage: async (id, data) => {
         try {
             const updatedPackage = await updateQuestionPackage(id, data);
             set((state) => ({
                 packages: state.packages.map((pkg) =>
-                    pkg._id === id ? updatedPackage : pkg
+                    pkg.id === id ? { ...pkg, ...updatedPackage } : pkg
                 ),
-                error: null
             }));
         } catch (error) {
-            set({ error: error.message });
+            console.error("Error updating package:", error);
         }
     },
 
@@ -51,13 +53,13 @@ const useQuestionPackageStore = create((set) => ({
         try {
             await deleteQuestionPackage(id);
             set((state) => ({
-                packages: state.packages.filter((pkg) => pkg._id !== id),
-                error: null
+                packages: state.packages.filter((pkg) => pkg.id !== id),
+                error: null,
             }));
         } catch (error) {
             set({ error: error.message });
         }
-    }
+    },
 }));
 
 export default useQuestionPackageStore;

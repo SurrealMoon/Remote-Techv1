@@ -100,18 +100,22 @@ export const addQuestionToPackage = async (req: Request, res: Response) => {
 // Soru güncelleme
 export const updateQuestionInPackage = async (req: Request, res: Response) => {
     const { packageId, questionId } = req.params;
+
+    if (!packageId || !questionId) {
+        return res.status(400).json({ message: 'Package ID veya Question ID eksik.' });
+    }
+
     const { questionText, options, answer, time, order } = req.body;
 
     try {
         const questionPackage = await QuestionPackage.findById(packageId);
         if (!questionPackage) {
-            return res.status(404).json({ message: 'Paket bulunamadı' });
+            return res.status(404).json({ message: 'Paket bulunamadı.' });
         }
 
-        // Soruyu find ile bul ve _id'nin varlığını kontrol et
         const question = questionPackage.questions.find((q) => q._id && q._id.toString() === questionId);
         if (!question) {
-            return res.status(404).json({ message: 'Soru bulunamadı' });
+            return res.status(404).json({ message: 'Soru bulunamadı.' });
         }
 
         question.questionText = questionText || question.questionText;
@@ -123,10 +127,11 @@ export const updateQuestionInPackage = async (req: Request, res: Response) => {
         await questionPackage.save();
         res.status(200).json(questionPackage);
     } catch (error) {
-        console.error('Error in addQuestionToPackage:', error);
-        res.status(500).json({ message: (error as Error).message });
+        console.error('Error in updateQuestionInPackage:', error);
+        res.status(500).json({ message: 'Güncelleme sırasında hata oluştu.' });
     }
 };
+
 
 // Soru silme
 export const deleteQuestionFromPackage = async (req: Request, res: Response) => {

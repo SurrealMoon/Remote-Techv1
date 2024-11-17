@@ -6,9 +6,12 @@ import { getInterviewById, getQuestionsInPackage } from '../services/interviewSe
 import useCandidateStore from '../stores/useCandidateStore';
 
 
-const uploadVideo = async (file) => {
+const uploadVideo = async (file, interviewId, candidateId) => {
     const formData = new FormData();
     formData.append('video', file, 'recorded-video.webm'); // Dosya adı eklendi
+    formData.append('interviewId', interviewId); // interviewId'yi ekleyin
+    formData.append('candidateId', candidateId); // candidateId'yi ekleyin
+
 
     console.log("Uploading video file:", file);
     console.log("FormData:", [...formData.entries()]);
@@ -39,29 +42,35 @@ const CandidateInfoPopup = ({ onClose, interviewId }) => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const addCandidate = useCandidateStore((state) => state.addCandidate);
     const error = useCandidateStore((state) => state.error);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+    
         const kvkkChecked = document.getElementById('kvkk').checked;
+    
         if (firstName && lastName && email && phoneNumber && kvkkChecked) {
-            const candidateInfo = { firstName, lastName, email, phoneNumber, interviewId };
+            const candidateData = {
+                firstName,
+                lastName,
+                email,
+                phone: phoneNumber.trim(), // phone olarak gönderiyoruz
+                interviewId,
+            };
+    
             try {
-                await createCandidate(candidateInfo); 
-                onClose(candidateInfo);
+                const newCandidate = await createCandidate(candidateData);
+                console.log("New candidate created:", newCandidate);
+                onClose(newCandidate); // Pop-up'ı kapat ve veriyi aktar
             } catch (err) {
                 console.error('Error adding candidate:', err);
-                if (err.message) {
-                    alert(err.message); 
-                } else {
-                    alert('Bir hata oluştu. Lütfen tekrar deneyin.');
-                }
+                alert(err.message || 'Bir hata oluştu. Lütfen tekrar deneyin.');
             }
         } else {
             alert('Lütfen tüm alanları doldurun ve KVKK onayını kabul edin.');
         }
     };
+    
 
     return (
         <div className="popup-overlay">
@@ -224,11 +233,13 @@ const InterviewRecordingPage = ({ onSubmit }) => {
     
 
     const stopRecording = async () => {
+        // MediaRecorder durduruluyor
         if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
             console.log("Stopping MediaRecorder...");
             mediaRecorderRef.current.stop();
         }
     
+        // Video akışı durduruluyor
         if (videoRef.current.srcObject) {
             console.log("Stopping video stream...");
             videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
@@ -242,6 +253,7 @@ const InterviewRecordingPage = ({ onSubmit }) => {
             return;
         }
     
+        // Video blob oluşturuluyor
         const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
         console.log("Recorded video blob size:", videoBlob.size);
     
@@ -252,11 +264,30 @@ const InterviewRecordingPage = ({ onSubmit }) => {
         }
     
         try {
-            await uploadVideo(videoBlob);
+            // Interview ID ve Candidate ID bilgileri
+            const interviewId = candidateInfo?.interviewId; // `candidateInfo`'dan alınır
+            const candidateId = candidateInfo?._id; // Adayın veritabanı ID'si
+    
+            if (!interviewId || !candidateId) {
+                console.error("Interview ID or Candidate ID is missing.");
+                alert("Mülakat bilgileri eksik. Video yüklenemedi.");
+                return;
+            }
+    
+            console.log("Uploading video with interviewId and candidateId:", {
+                interviewId,
+                candidateId,
+            });
+    
+            // Video yükleniyor
+            await uploadVideo(videoBlob, interviewId, candidateId);
+            console.log("Video successfully uploaded.");
         } catch (error) {
             console.error("Video upload failed:", error);
+            alert("Video yüklenemedi. Lütfen tekrar deneyin.");
         }
     };
+    
     
 
     const handleNextQuestion = () => {
