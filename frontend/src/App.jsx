@@ -17,10 +17,7 @@ const App = () => {
         <Route path="/" element={<AdminLoginPage />} />
         <Route path="/admin-panel/*" element={<AdminPanel />} />
         <Route path="/videos/:id" element={<SeeVideos />} />
-        <Route
-          path="/video-recording/:id"
-          element={<InterviewRecordingPage onSubmit={handleRecordingSubmit} />}
-        />
+        
       </Routes>
     </Router>
   );
