@@ -10,7 +10,8 @@ export const getVideosByInterview = async (req: Request, res: Response) => {
         const videos = await Video.find({ interviewId });
 
         if (!videos || videos.length === 0) {
-            return res.status(404).json({ message: 'No videos found for this interview.' });
+             res.status(404).json({ message: 'No videos found for this interview.' });
+             return
         }
 
         // Videoların yanında aday bilgilerini de alın
@@ -48,7 +49,8 @@ export const saveComment = async (req: Request, res: Response) => {
         const video = await Video.findById(videoId);
         if (!video) {
             console.error('Video not found.');
-            return res.status(404).json({ message: 'Video not found.' });
+             res.status(404).json({ message: 'Video not found.' });
+             return
         }
 
         // Yorum ekleme veya güncelleme
@@ -74,7 +76,8 @@ export const deleteVideo = async (req: Request, res: Response) => {
 
         const video = await Video.findById(videoId);
         if (!video) {
-            return res.status(404).json({ message: 'Video bulunamadı.' });
+             res.status(404).json({ message: 'Video bulunamadı.' });
+             return
         }
 
         await Video.findByIdAndDelete(videoId);

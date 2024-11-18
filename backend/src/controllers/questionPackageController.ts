@@ -30,7 +30,8 @@ export const getQuestionsInPackage = async (req: Request, res: Response) => {
     try {
         const questionPackage = await QuestionPackage.findById(packageId);
         if (!questionPackage) {
-            return res.status(404).json({ message: 'Soru paketi bulunamadı' });
+             res.status(404).json({ message: 'Soru paketi bulunamadı' });
+             return
         }
         res.status(200).json(questionPackage.questions);
     } catch (error) {
@@ -44,7 +45,8 @@ export const updateQuestionPackage = async (req: Request, res: Response) => {
     try {
         const updatedPackage = await QuestionPackage.findByIdAndUpdate(id, req.body, { new: true });
         if (!updatedPackage) {
-            return res.status(404).json({ message: 'Paket bulunamadı' });
+            res.status(404).json({ message: 'Paket bulunamadı' });
+            return
         }
         res.status(200).json(updatedPackage);
     } catch (error) {
@@ -58,7 +60,8 @@ export const deleteQuestionPackage = async (req: Request, res: Response) => {
     try {
         const deletedPackage = await QuestionPackage.findByIdAndDelete(id);
         if (!deletedPackage) {
-            return res.status(404).json({ message: 'Paket bulunamadı' });
+            res.status(404).json({ message: 'Paket bulunamadı' });
+            return
         }
         res.status(200).json({ message: 'Paket silindi' });
     } catch (error) {
@@ -74,7 +77,8 @@ export const addQuestionToPackage = async (req: Request, res: Response) => {
     try {
         const questionPackage = await QuestionPackage.findById(packageId);
         if (!questionPackage) {
-            return res.status(404).json({ message: 'Paket bulunamadı' });
+            res.status(404).json({ message: 'Paket bulunamadı' });
+            return 
         }
 
         const newQuestion = {
@@ -102,7 +106,8 @@ export const updateQuestionInPackage = async (req: Request, res: Response) => {
     const { packageId, questionId } = req.params;
 
     if (!packageId || !questionId) {
-        return res.status(400).json({ message: 'Package ID veya Question ID eksik.' });
+         res.status(400).json({ message: 'Package ID veya Question ID eksik.' });
+         return
     }
 
     const { questionText, options, answer, time, order } = req.body;
@@ -110,12 +115,14 @@ export const updateQuestionInPackage = async (req: Request, res: Response) => {
     try {
         const questionPackage = await QuestionPackage.findById(packageId);
         if (!questionPackage) {
-            return res.status(404).json({ message: 'Paket bulunamadı.' });
+             res.status(404).json({ message: 'Paket bulunamadı.' });
+             return
         }
 
         const question = questionPackage.questions.find((q) => q._id && q._id.toString() === questionId);
         if (!question) {
-            return res.status(404).json({ message: 'Soru bulunamadı.' });
+             res.status(404).json({ message: 'Soru bulunamadı.' });
+             return
         }
 
         question.questionText = questionText || question.questionText;
@@ -140,12 +147,14 @@ export const deleteQuestionFromPackage = async (req: Request, res: Response) => 
     try {
         const questionPackage = await QuestionPackage.findById(packageId);
         if (!questionPackage) {
-            return res.status(404).json({ message: 'Paket bulunamadı' });
+             res.status(404).json({ message: 'Paket bulunamadı' });
+             return
         }
 
         const questionIndex = questionPackage.questions.findIndex((q) => q._id && q._id.toString() === questionId);
         if (questionIndex === -1) {
-            return res.status(404).json({ message: 'Soru bulunamadı' });
+             res.status(404).json({ message: 'Soru bulunamadı' });
+             return
         }
 
         questionPackage.questions.splice(questionIndex, 1); // Soruyu diziden kaldır
@@ -166,7 +175,8 @@ export const reorderQuestionsInPackage = async (req: Request, res: Response) => 
     try {
         const questionPackage = await QuestionPackage.findById(packageId);
         if (!questionPackage) {
-            return res.status(404).json({ message: 'Paket bulunamadı' });
+             res.status(404).json({ message: 'Paket bulunamadı' });
+             return
         }
 
         // Gelen sırayla `order` alanını güncelle

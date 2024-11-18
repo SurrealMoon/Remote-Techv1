@@ -22,27 +22,31 @@ router.post('/upload', upload.single('video'), async (req: Request, res: Respons
 
         // interviewId ve candidateId kontrolü
         if (!interviewId || !candidateId) {
-            return res.status(400).json({
+             res.status(400).json({
                 error: 'interviewId ve candidateId alanları zorunludur.',
             });
+            return
         }
 
         if (!req.file) {
-            return res.status(400).json({ error: 'Video dosyası bulunamadı.' });
+             res.status(400).json({ error: 'Video dosyası bulunamadı.' });
+             return
         }
 
         // Yalnızca MP4 ve WebM formatlarını kabul edin
         if (!['video/mp4', 'video/webm'].includes(req.file.mimetype)) {
-            return res.status(400).json({
+             res.status(400).json({
                 error: 'Sadece MP4 veya WebM formatındaki videolar kabul edilmektedir.',
             });
+            return
         }
 
         // Dosya boyutu sınırı kontrolü (50MB)
         if (req.file.size > 200 * 1024 * 1024) { // 200 MB sınırı
-            return res.status(400).json({
+             res.status(400).json({
                 error: 'Video boyutu çok büyük (200MB üzeri).',
             });
+            return
         }
         
 

@@ -10,14 +10,16 @@ export const createCandidate = async (req: Request, res: Response) => {
         const phoneRegex = /^[0-9]{1,15}$/; // Sadece rakamlardan oluşan 1-15 hane arası
         if (!phone || !phoneRegex.test(phone)) {
             console.error("Invalid phone format:", phone);
-            return res.status(400).json({ message: 'Geçersiz telefon numarası formatı.' });
+             res.status(400).json({ message: 'Geçersiz telefon numarası formatı.' });
+             return
         }
 
         // Aynı email veya telefon ile bir adayın olup olmadığını kontrol et
         const existingCandidate = await Candidate.findOne({ $or: [{ email }, { phone }] });
         if (existingCandidate) {
             console.error("Existing candidate found:", existingCandidate);
-            return res.status(400).json({ message: 'Bu e-posta adresi veya telefon numarası ile zaten bir aday mevcut.' });
+             res.status(400).json({ message: 'Bu e-posta adresi veya telefon numarası ile zaten bir aday mevcut.' });
+             return
         }
 
         // Yeni aday oluştur

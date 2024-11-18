@@ -64,7 +64,8 @@ export const updateInterview = async (req: Request, res: Response) => {
 
         const updatedInterview = await Interview.findByIdAndUpdate(id, req.body, { new: true });
         if (!updatedInterview) {
-            return res.status(404).json({ message: 'Interview not found' });
+             res.status(404).json({ message: 'Interview not found' });
+             return
         }
         res.status(200).json(updatedInterview);
     } catch (error: any) {
@@ -79,7 +80,8 @@ export const deleteInterview = async (req: Request, res: Response) => {
     try {
         const deletedInterview = await Interview.findByIdAndDelete(id);
         if (!deletedInterview) {
-            return res.status(404).json({ message: 'Interview not found' });
+             res.status(404).json({ message: 'Interview not found' });
+             return
         }
         res.status(200).json({ message: 'Interview successfully deleted' });
     } catch (error: any) {
@@ -104,7 +106,8 @@ export const getInterviewById = async (req: Request, res: Response) => {
         const interview = await Interview.findById(id);
         if (!interview) {
             console.warn("Interview not found for ID:", id);
-            return res.status(404).json({ message: 'Interview not found' });
+             res.status(404).json({ message: 'Interview not found' });
+             return
         }
 
         // `customQuestions` alanını doğrula ve dönüştür

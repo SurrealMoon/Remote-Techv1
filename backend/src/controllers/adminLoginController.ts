@@ -12,7 +12,8 @@ async function loginAdmin(req: Request, res: Response) {
     try {
         const admin = await Admin.findOne({ username });
         if (!admin || password !== MASTER_ADMIN_PASSWORD) {
-            return res.status(401).json({ message: 'Geçersiz kullanıcı adı veya şifre.' });
+             res.status(401).json({ message: 'Geçersiz kullanıcı adı veya şifre.' });
+             return
         }
 
         const token = jwt.sign(
