@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3000;
 
 // CORS'u global olarak tüm isteklere uygulayın ve API route'larından önce tanımlayın
 app.use(cors({
-    origin: 'http://localhost:5173', // Frontend'in çalıştığı portu belirtisyoruz
+    origin: [process.env.FRONTEND_URL || "", process.env.FRONTEND_USER_URL || "" ], // Frontend'in çalıştığı portu belirtisyoruz
     credentials: true, // Eğer frontend'de withCredentials kullanıyorsanız
 }));
 
