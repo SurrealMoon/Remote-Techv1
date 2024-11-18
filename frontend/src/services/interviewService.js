@@ -3,6 +3,8 @@
 import axios from 'axios';
 
 
+
+
 // Mülakatları getirme
 export const fetchInterviews = async () => {
     const response = await axios.get(`/interviews`);
