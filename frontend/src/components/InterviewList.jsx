@@ -47,7 +47,7 @@ const InterviewList = () => {
   };
 
   const handleCopyLink = (interviewId) => {
-    const link = `${window.location.origin}/video-recording/${interviewId}`;
+    const link = `${import.meta.env.VITE_INTERVIEW_URL}/video-recording/${interviewId}`;
     navigator.clipboard.writeText(link)
       .then(() => alert('Link kopyalandı: ' + link))
       .catch(err => console.error('Link kopyalanamadı: ', err));
