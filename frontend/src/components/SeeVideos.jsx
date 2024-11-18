@@ -77,7 +77,7 @@ const SeeVideos = () => {
     if (window.confirm('Bu videoyu silmek istediğinizden emin misiniz?')) {
       try {
         // API isteği
-        await axios.delete(`/api/uploaded-videos/${videoId}`);
+        await axios.delete(`/uploaded-videos/${videoId}`);
         alert('Video başarıyla silindi!');
   
         // Frontend'deki state'i güncelle
