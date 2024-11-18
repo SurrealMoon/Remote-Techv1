@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdminLoginPage from './components/AdminLoginPage';
 import AdminPanel from './components/AdminPanel';
 import SeeVideos from "./components/SeeVideos";
-import InterviewRecordingPage from './components/InterviewRecordingPage';
 
 const App = () => {
   // Kayıt tamamlandığında yapılacak işlemler
