@@ -48,7 +48,7 @@ const SeeVideos = () => {
     try {
       // API isteği
       const response = await axios.put(
-        `http://localhost:3000/api/uploaded-videos/${videoId}/comment`,
+        `/uploaded-videos/${videoId}/comment`,
         { comment }
       );
       alert('Yorum başarıyla kaydedildi!');
