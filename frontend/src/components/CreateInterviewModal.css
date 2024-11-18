@@ -18,8 +18,6 @@ body {
     overflow: hidden;
 }
 
-/* Create Interview Modal CSS */
-
 /* Modal Kaplama */
 .create-interview-modal-overlay {
     position: fixed;
@@ -27,7 +25,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); /* Daha hafif bir arka plan */
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -38,118 +36,68 @@ body {
 /* Modal İçerik */
 .create-interview-modal-content {
     background-color: #ffffff;
-    padding: 24px;
-    border-radius: 10px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     width: 90%;
-    max-width: 480px; /* Modal genişliğini biraz artırdık */
-    max-height: 90vh; /* Modal maksimum yüksekliğini sınırladık */
-    overflow-y: auto; /* Dikey kaydırma ekledik */
+    max-width: 400px;
+    max-height: 85vh; /* Modalın ekranın %85'ini kullanmasını sağla */
+    overflow-y: auto; /* İçeriğin kaydırılmasını sağla */
     text-align: left;
-    animation: slideUp 0.4s ease;
+    animation: slideUp 0.3s ease;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    position: relative;
-    z-index: 1100;
 }
 
-/* Modal Başlık */
-.create-interview-modal-content h2 {
-    font-size: 1.4rem; /* Daha küçük ve şık bir başlık boyutu */
-    font-weight: 600;
-    color: #00ffbf;
-    text-align: center;
-    position: relative;
-    z-index: 1100;
-}
-
-/* Girdi Alanları */
-.input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.input-group label {
-    font-weight: 500;
-    color: #2a2e37;
-    font-size: 0.9rem; /* Font boyutu küçültüldü */
-}
-
-.input-group input,
-.input-group select {
-    all: unset;
-    padding: 8px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background-color: #ffffff;
-    color: #333;
-    font-size: 0.95rem;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.input-group input:focus,
-.input-group select:focus {
-    border-color: #1F8A70;
-    background-color: #ffffff; /* Odaklanıldığında beyaz arka plan kullanıldı */
-    box-shadow: 0 0 0 3px rgba(31, 138, 112, 0.15);
-    outline: none;
-}
-
-/* Checkbox Grubu */
-.checkbox-group {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    padding-top: 8px;
-}
-
-.checkbox-item {
-    padding: 8px 16px;
-    border-radius: 8px;
-    background-color: #f1f3f6;
-    color: #2a2e37;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.checkbox-item.checked {
-    background-color: #1F8A70;
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(31, 138, 112, 0.2);
-}
-
-.checkbox-item:hover {
-    background-color: #e1e7eb;
-}
-
-/* Özel Sorular Konteyneri */
+/* Custom Questions */
 .custom-questions-container {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding-bottom: 10px; /* Alt kısmına biraz boşluk ekledik */
-    overflow-y: visible; /* Soruların taşmasını önlemek için görünürlüğü açık tuttuk */
+    min-height: 150px; /* Minimum yükseklik belirle */
+    max-height: calc(85vh - 350px); /* Modalın içindeki alanı dinamik yap */
+    overflow-y: auto;
+    padding-right: 6px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    padding: 10px;
 }
 
+/* Kaydırma Çubuğu */
+.custom-questions-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-questions-container::-webkit-scrollbar-thumb {
+    background-color: #1F8A70;
+    border-radius: 3px;
+}
+
+.custom-questions-container::-webkit-scrollbar-thumb:hover {
+    background-color: #145A47;
+}
+
+/* Custom Question Alanı */
 .custom-question {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+    flex-wrap: nowrap; /* Soruların hizasını düzgün tut */
+    padding: 6px 0;
 }
 
 .custom-question input {
     flex: 1;
+    min-width: 120px;
     padding: 8px;
     border: 1px solid #d1d5db;
     border-radius: 6px;
-    background-color: #f9fafb;
-    color: #333333;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #ffffff;
+    font-size: 0.9rem;
+    color: #333;
+    transition: all 0.3s ease;
 }
 
 .custom-question input:focus {
@@ -158,141 +106,57 @@ body {
 }
 
 .delete-question-btn {
-    padding: 6px;
-    background-color: #e74c3c;
+    padding: 6px 12px;
+    background-color: #e63946;
     color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.delete-question-btn:hover {
-    background-color: #c0392b;
-}
-
-/* Soru Ekleme Butonu */
-.add-question-btn {
-    align-self: center;
-    padding: 10px 20px;
-    background: #1F8A70;
-    color: #ffffff;
-    border: none;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-    font-weight: 600;
-    box-shadow: 0 4px 12px rgba(31, 138, 112, 0.2);
-    margin-top: 16px; /* Butonun üst tarafında biraz boşluk ekledik */
-}
-
-.add-question-btn:hover {
-    background: #145A47;
-    transform: translateY(-2px);
-}
-
-/* Yeni Soru Ekleme Popup (Add Question Modal) */
-.add-question-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1500;
-}
-
-.add-question-modal-content {
-    background-color: #ffffff;
-    padding: 24px;
-    border-radius: 10px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
-    animation: slideUp 0.4s ease;
-    position: relative;
-}
-
-.add-question-modal-content h2 {
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: #1F8A70;
-    margin-bottom: 16px;
-}
-
-.add-question-modal-content input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    margin-bottom: 16px;
-    transition: border-color 0.3s ease;
-}
-
-.add-question-modal-content input:focus {
-    border-color: #1F8A70;
-    outline: none;
-}
-
-.add-question-modal-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-}
-
-.add-btn, .cancel-btn {
-    padding: 6px 14px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 0.85rem;
-    transition: all 0.3s ease;
-    font-weight: 600;
-    width: auto;
-    min-width: 100px;
+    transition: background-color 0.3s ease;
 }
 
-.add-btn {
-    background: #1F8A70;
+.delete-question-btn:hover {
+    background-color: #d62828;
+}
+
+/* Add Question Button */
+.add-question-btn {
+    align-self: center;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #1F8A70, #145A47); /* Gradyan arka plan */
     color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-top: 10px;
 }
 
-.add-btn:hover {
-    background: #145A47;
-}
-
-.cancel-btn {
-    background-color: #d1d5db;
-    color: #333333;
-}
-
-.cancel-btn:hover {
-    background-color: #b0b3b8;
+.add-question-btn:hover {
+    background: linear-gradient(135deg, #145A47, #0d3f2c);
+    transform: translateY(-1px);
 }
 
 /* Modal Butonlar */
 .modal-buttons {
     display: flex;
-    justify-content: center; /* Butonları ortaladık */
-    gap: 12px; /* Boşluk azaltıldı */
-    margin-top: 16px;
+    justify-content: space-between;
+    gap: 8px;
 }
 
-.create-btn, .cancel-btn {
-    padding: 6px 14px; /* Butonları daha minimal hale getirdik */
+.create-btn,
+.cancel-btn {
+    flex: 1;
+    padding: 10px;
     border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: all 0.3s ease;
+    border-radius: 8px;
+    font-size: 0.95rem;
     font-weight: 600;
-    width: auto;
-    min-width: 100px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
 }
 
 .create-btn {
@@ -305,12 +169,28 @@ body {
 }
 
 .cancel-btn {
-    background-color: #d1d5db;
+    background-color: #e0e0e0;
     color: #333333;
 }
 
 .cancel-btn:hover {
-    background-color: #b0b3b8;
+    background-color: #c7c7c7;
+}
+
+/* Takvim Simgesi Sorunu Çözümü */
+.input-group input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    background-color: #1F8A70;
+    color: #ffffff;
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer;
+    border: 1px solid #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.input-group input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+    background-color: #145A47;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Animasyonlar */

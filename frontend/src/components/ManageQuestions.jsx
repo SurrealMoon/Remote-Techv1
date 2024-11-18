@@ -78,8 +78,8 @@ const ManageQuestions = ({ packageId, packageName, questions: initialQuestions =
               <td>{question.questionText || "Untitled Question"}</td>
               <td>{question.time ? Math.round(question.time / 60) : "-"}</td>
               <td>
-                <button className="edit-button" onClick={() => handleEditQuestion(question)}>✏️</button>
-                <button className="delete-button" onClick={() => handleDeleteQuestion(question._id)}>🗑️</button>
+                <button className="edit-button" onClick={() => handleEditQuestion(question)}>✎</button>
+                <button className="delete-button" onClick={() => handleDeleteQuestion(question._id)}>🗑</button>
               </td>
             </tr>
           ))}
@@ -139,3 +139,4 @@ const QuestionModal = ({ question, onSave, onClose }) => {
 };
 
 export default ManageQuestions;
+  

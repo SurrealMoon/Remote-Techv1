@@ -39,11 +39,12 @@ router.post('/upload', upload.single('video'), async (req: Request, res: Respons
         }
 
         // Dosya boyutu sınırı kontrolü (50MB)
-        if (req.file.size > 50 * 1024 * 1024) {
+        if (req.file.size > 200 * 1024 * 1024) { // 200 MB sınırı
             return res.status(400).json({
-                error: 'Video boyutu çok büyük (50MB üzeri).',
+                error: 'Video boyutu çok büyük (200MB üzeri).',
             });
         }
+        
 
         // S3'e yükleme işlemi
         const videoUrl = await uploadToS3(req.file);

@@ -18,8 +18,6 @@ const CreateInterviewModal = ({ onClose, onAddInterview, initialData }) => {
     const [title, setTitle] = useState(initialData?.title || '');
     const [selectedPackage, setSelectedPackage] = useState(initialData?.selectedPackage || '');
     const [date, setDate] = useState(formatDateForInput(initialData?.date || ''));
-    const [canSkip, setCanSkip] = useState(initialData?.canSkip || false);
-    const [showAtOnce, setShowAtOnce] = useState(initialData?.showAtOnce || false);
     const [packages, setPackages] = useState([]);
 
     const [customQuestions, setCustomQuestions] = useState(
@@ -27,7 +25,6 @@ const CreateInterviewModal = ({ onClose, onAddInterview, initialData }) => {
             typeof q === 'string' ? { questionText: q, time: 1 } : q
         ) || []
     );
-
 
     const addInterview = useInterviewStore((state) => state.addInterview);
 
@@ -54,26 +51,24 @@ const CreateInterviewModal = ({ onClose, onAddInterview, initialData }) => {
             alert('Please fill in all required fields');
             return;
         }
-    
+
         if (customQuestions.some(q => !q.questionText || !q.time)) {
             alert('Please fill in all custom question fields, including time.');
             return;
         }
-    
+
         const formattedDate = new Date(date).toISOString();
-    
+
         const newInterview = {
             _id: initialData?._id,
             title,
             date: formattedDate,
-            canSkip,
-            showAtOnce,
             selectedPackage,
             customQuestions
         };
-    
+
         console.log("Submitting Interview Data:", newInterview);
-    
+
         try {
             if (initialData && initialData._id) {
                 await onAddInterview(newInterview);
@@ -86,7 +81,6 @@ const CreateInterviewModal = ({ onClose, onAddInterview, initialData }) => {
             alert('There was an error saving the interview. Please try again.');
         }
     };    
-    
 
     const handleAddQuestion = () => {
         setCustomQuestions([...customQuestions, { questionText: "", time: null }]); // Süre başlangıçta null
@@ -99,92 +93,98 @@ const CreateInterviewModal = ({ onClose, onAddInterview, initialData }) => {
     };    
 
     return (
-        <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && onClose()}>
-            <div className="modal-content">
-                <h2>{initialData ? 'Edit Interview' : 'Create Interview'}</h2>
-
-                <label>Title</label>
-                <input 
-                    type="text" 
-                    value={title} 
-                    onChange={(e) => setTitle(e.target.value)} 
-                    placeholder="Enter interview title" 
-                    required
+        <div 
+        className="create-interview-modal-overlay" 
+        onClick={(e) => e.target.className === 'create-interview-modal-overlay' && onClose()}
+      >
+        <div className="create-interview-modal-content">
+          <h2>{initialData ? 'Edit Interview' : 'Create Interview'}</h2>
+      
+          <div className="input-group">
+            <label htmlFor="title">Title</label>
+            <input 
+              id="title"
+              type="text" 
+              value={title} 
+              onChange={(e) => setTitle(e.target.value)} 
+              placeholder="Enter interview title" 
+              required 
+            />
+          </div>
+      
+          <div className="input-group">
+            <label htmlFor="question-package">Select Question Package</label>
+            <select 
+              id="question-package"
+              value={selectedPackage} 
+              onChange={(e) => setSelectedPackage(e.target.value)}
+            >
+              <option value="">Select a package</option>
+              {packages.map((pkg) => (
+                <option key={pkg._id} value={pkg._id}>{pkg.packageName}</option>
+              ))}
+            </select>
+          </div>
+      
+          <div className="input-group">
+            <label htmlFor="interview-date">Interview Date</label>
+            <input 
+              id="interview-date"
+              type="datetime-local" 
+              value={date} 
+              onChange={(e) => setDate(e.target.value)} 
+              required 
+            />
+          </div>
+      
+          <h3>Custom Questions</h3>
+          <div className="custom-questions-container">
+            {customQuestions.map((question, index) => (
+              <div key={index} className="custom-question">
+                <input
+                  type="text"
+                  placeholder="Question Text"
+                  value={question.questionText || ""}
+                  onChange={(e) => handleQuestionChange(index, 'questionText', e.target.value)}
+                  required
                 />
-
-                <label>Select Question Package</label>
-                <select 
-                    value={selectedPackage} 
-                    onChange={(e) => setSelectedPackage(e.target.value)}
-                >
-                    <option value="">Select a package</option>
-                    {packages.map((pkg) => (
-                        <option key={pkg._id} value={pkg._id}>{pkg.packageName}</option>
-                    ))}
-                </select>
-
-                <label>Interview Date</label>
-                <input 
-                    type="datetime-local" 
-                    value={date} 
-                    onChange={(e) => setDate(e.target.value)} 
-                    required
+                <input
+                  type="number"
+                  placeholder="Time (minutes)"
+                  value={question.time !== null ? question.time : ""}
+                  onChange={(e) => handleQuestionChange(index, 'time', Number(e.target.value))}
+                  required
+                  min="1"
                 />
-
-                <div className="checkbox-group">
-                    <label>
-                        <input 
-                            type="checkbox" 
-                            checked={canSkip} 
-                            onChange={(e) => setCanSkip(e.target.checked)} 
-                        />
-                        Can Skip
-                    </label>
-                    <label>
-                        <input 
-                            type="checkbox" 
-                            checked={showAtOnce} 
-                            onChange={(e) => setShowAtOnce(e.target.checked)} 
-                        />
-                        Show At Once
-                    </label>
-                </div>
-
-                <h3>Custom Questions</h3>
-                <div className="custom-questions-container">
-                    {customQuestions.map((question, index) => (
-                        <div key={index} className="custom-question">
-                       <input
-    type="text"
-    placeholder="Question Text"
-    value={question.questionText || ""}
-    onChange={(e) => handleQuestionChange(index, 'questionText', e.target.value)}
-    required
-/>
-<input
-    type="number"
-    placeholder="Time (minutes)"
-    value={question.time !== null ? question.time : ""}
-    onChange={(e) => handleQuestionChange(index, 'time', Number(e.target.value))}
-    required
-    min="1"
-/>
-
-                        </div>
-                    ))}
-                </div>
-                <button className="add-question-btn" onClick={handleAddQuestion}>Add Question</button>
-
                 <button 
-                    className="create-btn" 
-                    onClick={handleSubmit}
-                    disabled={!title || !selectedPackage || !date}
+                  className="delete-question-btn" 
+                  onClick={() => {
+                    const updatedQuestions = [...customQuestions];
+                    updatedQuestions.splice(index, 1);
+                    setCustomQuestions(updatedQuestions);
+                  }}
                 >
-                    {initialData ? 'Save' : 'Create'}
+                  Delete
                 </button>
-                <button className="cancel-btn" onClick={onClose}>Cancel</button>
-            </div>
+              </div>
+            ))}
+          </div>
+      
+          <button className="add-question-btn" onClick={handleAddQuestion}>Add Question</button>
+      
+          <div className="modal-buttons">
+            <button 
+              className="create-btn" 
+              onClick={handleSubmit}
+              disabled={!title || !selectedPackage || !date}
+            >
+              {initialData ? 'Save' : 'Create'}
+            </button>
+            <button className="cancel-btn" onClick={onClose}>Cancel</button>
+          </div>
         </div>
+      </div>
+      
     );
 };
 

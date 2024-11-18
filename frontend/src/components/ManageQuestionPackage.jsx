@@ -90,9 +90,9 @@ const ManageQuestionPackage = () => {
               <td>{pkg.packageName}</td>
               <td>{pkg.questionCount}</td>
               <td>
-                <button className="edit-button" onClick={() => handleEditPackage(pkg)}>✏️</button>
-                <button className="delete-button" onClick={() => handleDeletePackage(pkg._id)}>🗑️</button>
-                <button className="manage-questions-button" onClick={() => handleManageQuestions(pkg)}>Manage Questions</button>
+                <button className="edit-button" onClick={() => handleEditPackage(pkg)}>✎</button>
+                <button className="delete-button" onClick={() => handleDeletePackage(pkg._id)}>🗑</button>
+                <button className="manage-questions-button" onClick={() => handleManageQuestions(pkg)}>📋 Manage Questions</button>
               </td>
             </tr>
           ))}
@@ -147,14 +147,6 @@ const PackageModal = ({ package: currentPackage, onSave, onClose }) => {
               value={name}
               onChange={(e) => setName(e.target.value)} // Name güncelleniyor
               required
-            />
-          </div>
-          <div>
-            <label>Question Count</label>
-            <input
-              type="number"
-              value={count} // Dinamik olarak count güncelleniyor
-              readOnly
             />
           </div>
           <button type="submit">Save</button>

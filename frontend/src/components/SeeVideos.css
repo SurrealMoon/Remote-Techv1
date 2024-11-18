@@ -1,64 +1,189 @@
-/* src/components/SeeVideos.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;600;700&display=swap');
 
 /* Genel sayfa düzeni */
-.video-page {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: #ffffff; /* Beyaz arka plan */
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    color: #333; /* Koyu gri yazı rengi */
-    text-align: center;
-  }
-  
-  /* Sayfa başlığı */
-  .video-page h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #333; /* Başlık rengi */
-    font-weight: 600;
-  }
-  
-  /* Video listesi */
-  .video-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Videolar arasında boşluk */
-  }
-  
-  /* Video öğesi */
-  .video-item {
-    background-color: #f9f9f9; /* Hafif gri arka plan */
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
-  }
-  
-  .video-item:hover {
-    transform: scale(1.02); /* Hover yapıldığında hafif büyüme */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Hover gölge efekti */
-  }
-  
-  /* Video başlığı */
-  .video-item h3 {
-    font-size: 1.2rem;
-    color: #555;
-    margin-bottom: 10px;
-  }
-  
-  /* Video oynatıcı */
-  .video-item video {
-    width: 100%;
-    border-radius: 8px;
-    outline: none;
-  }
-  
-  /* Henüz video yok mesajı */
-  .no-videos {
-    color: #777;
-    font-size: 1rem;
-    font-style: italic;
-  }
-  
+.see-videos-page {
+  display: flex;
+  flex-direction: column;
+  width: 95vw; /* Admin panelle aynı genişlik */
+  height: calc(100vh - 40px); /* Admin panelle aynı yükseklik */
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  background-color: #eaeaea; /* Ana arka plan rengi */
+  background-image: radial-gradient(#1F8A70 0.5px, transparent 0.5px), 
+                    radial-gradient(#1F8A70 0.5px, #eaeaea 0.5px);
+  background-size: 20px 20px; /* Desen boyutu */
+  background-position: 0 0, 10px 10px; /* Desen hizası */
+  backdrop-filter: blur(20px); /* İsteğe bağlı bulanıklık efekti */
+  margin: 20px auto; /* Ortalamak için */
+  padding: 40px;
+  color: #333333;
+  font-family: "Inter", sans-serif;
+}
+
+/* Sayfa başlığı */
+.see-videos-page h1 {
+  font-size: 2.6rem; /* Hafif büyük başlık */
+  margin-bottom: 40px;
+  color: #1F8A70; /* Başlık altındaki yeşil vurgu */
+  font-family: "Poppins", sans-serif; /* Başlıklar için Poppins */
+  font-weight: 700; /* Kalın başlık */
+  text-transform: uppercase;
+  border-bottom: 4px solid #1F8A70;
+  display: inline-block;
+  padding-bottom: 15px;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 40px auto; /* Ortalamak için */
+}
+
+/* Video listesi */
+.see-videos-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 sütun */
+  gap: 24px; /* Kartlar arasındaki boşluk */
+  width: 100%;
+  height: calc(100% - 100px); /* Başlığa göre ayarlanmış yükseklik */
+  overflow-y: auto; /* Dikey kaydırma */
+  padding: 20px;
+  justify-items: center; /* Kartları yatayda ortala */
+}
+
+/* Scrollbar tasarımı */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #1F8A70, #BEDB39);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #145A47, #BEDB39);
+}
+
+/* Video öğesi */
+.see-videos-item {
+  background-color: #FFFFFF;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 280px; /* Kart genişliği sınırı */
+  position: relative;
+}
+
+.see-videos-item:hover {
+  transform: scale(1.03); /* Hafif büyütme efekti */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Video başlığı */
+.see-videos-item h3 {
+  font-size: 1.6rem; /* Daha belirgin başlık */
+  color: #145A47;
+  font-family: "Poppins", sans-serif; /* Başlık için Poppins */
+  border-bottom: 2px solid #1F8A70;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  font-weight: 600; /* Başlık için orta kalınlık */
+  text-align: center;
+}
+
+/* Video oynatıcı */
+.see-videos-item video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 260px;
+  border-radius: 10px;
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+}
+
+/* Aday bilgileri */
+.see-videos-candidate-info {
+  text-align: left;
+  font-size: 1rem;
+  color: #333333;
+  font-family: "Inter", sans-serif; /* Aday bilgileri için Inter */
+  margin-top: 15px;
+}
+
+.see-videos-candidate-info p {
+  margin: 5px 0;
+  font-weight: 400; /* Normal metin */
+}
+
+.see-videos-candidate-info strong {
+  color: #1F8A70; /* Vurgulu yazılar */
+  font-weight: 600;
+}
+
+/* Hata mesajı */
+.see-videos-error {
+  color: #E53935;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+/* Henüz video yok mesajı */
+.see-videos-no-videos {
+  color: #B0B0B0;
+  font-size: 1.3rem;
+  font-style: italic;
+  margin-top: 30px;
+}
+/* Yorum alanı */
+.comment-area {
+  width: 100%;
+  height: 60px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 15px;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  resize: none;
+}
+
+/* Yorumu Kaydet Butonu */
+.save-comment-btn {
+  background: linear-gradient(135deg, #1F8A70, #BEDB39);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+
+.save-comment-btn:hover {
+  background: linear-gradient(135deg, #BEDB39, #1F8A70);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(31, 138, 112, 0.4);
+}
+
+/* Sil Butonu */
+.delete-video-btn {
+  background: linear-gradient(135deg, #e63946, #d62828);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+
+.delete-video-btn:hover {
+  background: linear-gradient(135deg, #d62828, #c12725);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(230, 57, 70, 0.4);
+}

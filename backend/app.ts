@@ -11,10 +11,6 @@ import candidateRoutes from './src/routes/candidateRoutes';
 import videoRoutes from './src/routes/videoRoutes';
 import uploadedVideosRoutes from './src/routes/uploadedVideosRoutes';
 
-
-
-
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 

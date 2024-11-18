@@ -5,7 +5,6 @@ export const createCandidate = async (req: Request, res: Response) => {
     try {
         console.log("Request Body:", req.body);
         const { firstName, lastName, email, phone, interviewId } = req.body; // phoneNumber yerine phone kullan
-        console.log("Phone:", phone);
 
         // Telefon numarası formatını kontrol et
         const phoneRegex = /^[0-9]{1,15}$/; // Sadece rakamlardan oluşan 1-15 hane arası
